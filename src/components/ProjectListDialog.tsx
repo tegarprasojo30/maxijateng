@@ -18,6 +18,7 @@ interface GroupedProject {
   satuanKerja: string;
   namaLPSE: string;
   totalNilaiKontrak: string;
+  status: string;
   count: number;
 }
 
@@ -35,6 +36,7 @@ function groupByKodeRUP(projects: Proyek[]): GroupedProject[] {
         satuanKerja: p.satuanKerja,
         namaLPSE: p.namaLPSE,
         totalNilaiKontrak: p.nilaiKontrak,
+        status: p.status,
         count: 1,
       });
     }
@@ -70,6 +72,7 @@ export default function ProjectListDialog({ projects, loading, companyName, open
               <TableHeader>
                 <TableRow className="bg-muted/50">
                   <TableHead className="font-semibold">Kode RUP</TableHead>
+                  <TableHead className="font-semibold">Status</TableHead>
                   <TableHead className="font-semibold">Nama Paket</TableHead>
                   <TableHead className="font-semibold">Kelompok Dinas</TableHead>
                   <TableHead className="font-semibold">Satuan Kerja</TableHead>
@@ -81,6 +84,7 @@ export default function ProjectListDialog({ projects, loading, companyName, open
                 {grouped.map((g, i) => (
                   <TableRow key={g.kodeRUP + i} className="table-row-hover">
                     <TableCell className="font-mono text-xs">{g.kodeRUP}</TableCell>
+                    <TableCell className="text-sm">{g.status}</TableCell>
                     <TableCell className="text-sm max-w-[250px]">{g.namaPaket}</TableCell>
                     <TableCell className="text-sm">{g.kelompokDinas}</TableCell>
                     <TableCell className="text-sm">{g.satuanKerja}</TableCell>
