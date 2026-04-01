@@ -18,6 +18,7 @@ interface GroupedProject {
   satuanKerja: string;
   namaLPSE: string;
   totalNilaiKontrak: string;
+  status: string;
   count: number;
 }
 
