@@ -36,6 +36,7 @@ function groupByKodeRUP(projects: Proyek[]): GroupedProject[] {
         satuanKerja: p.satuanKerja,
         namaLPSE: p.namaLPSE,
         totalNilaiKontrak: p.nilaiKontrak,
+        status: p.status,
         count: 1,
       });
     }
