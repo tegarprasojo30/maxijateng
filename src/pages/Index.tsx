@@ -52,6 +52,9 @@ export default function Index() {
         c.kodePenyedia.toLowerCase().includes(q)
       );
     }
+    if (filter === "all") {
+      result = [...result].sort((a, b) => a.kabupatenKota.localeCompare(b.kabupatenKota));
+    }
     return result;
   }, [companies, filter, search]);
 
