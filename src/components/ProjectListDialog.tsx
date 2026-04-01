@@ -72,6 +72,7 @@ export default function ProjectListDialog({ projects, loading, companyName, open
               <TableHeader>
                 <TableRow className="bg-muted/50">
                   <TableHead className="font-semibold">Kode RUP</TableHead>
+                  <TableHead className="font-semibold">Status</TableHead>
                   <TableHead className="font-semibold">Nama Paket</TableHead>
                   <TableHead className="font-semibold">Kelompok Dinas</TableHead>
                   <TableHead className="font-semibold">Satuan Kerja</TableHead>
