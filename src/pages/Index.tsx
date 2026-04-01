@@ -96,25 +96,19 @@ export default function Index() {
         </div>
 
         {/* Filter */}
-        <div>
+        <div className="max-w-xs">
           <p className="text-sm font-semibold text-muted-foreground mb-2">Filter Kabupaten/Kota</p>
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => setFilter("all")}
-              className={`badge-filter ${filter === "all" ? "badge-filter-active" : "badge-filter-inactive"}`}
-            >
-              Semua
-            </button>
-            {filterOptions.map(opt => (
-              <button
-                key={opt}
-                onClick={() => setFilter(opt)}
-                className={`badge-filter ${filter === opt ? "badge-filter-active" : "badge-filter-inactive"}`}
-              >
-                {opt}
-              </button>
-            ))}
-          </div>
+          <Select value={filter} onValueChange={setFilter}>
+            <SelectTrigger>
+              <SelectValue placeholder="Pilih Kabupaten/Kota" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Semua Kabupaten/Kota</SelectItem>
+              {filterOptions.map(opt => (
+                <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Table */}
