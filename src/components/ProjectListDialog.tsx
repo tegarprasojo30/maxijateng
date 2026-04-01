@@ -84,6 +84,7 @@ export default function ProjectListDialog({ projects, loading, companyName, open
                 {grouped.map((g, i) => (
                   <TableRow key={g.kodeRUP + i} className="table-row-hover">
                     <TableCell className="font-mono text-xs">{g.kodeRUP}</TableCell>
+                    <TableCell className="text-sm">{g.status}</TableCell>
                     <TableCell className="text-sm max-w-[250px]">{g.namaPaket}</TableCell>
                     <TableCell className="text-sm">{g.kelompokDinas}</TableCell>
                     <TableCell className="text-sm">{g.satuanKerja}</TableCell>
