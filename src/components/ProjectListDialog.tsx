@@ -77,7 +77,7 @@ export default function ProjectListDialog({ projects, loading, companyName, open
                   <TableHead className="font-semibold">Kelompok Dinas</TableHead>
                   <TableHead className="font-semibold">Satuan Kerja</TableHead>
                   <TableHead className="font-semibold">Nama LPSE</TableHead>
-                  <TableHead className="font-semibold text-right">Nilai Kontrak</TableHead>
+                  <TableHead className="font-semibold">Nilai Kontrak</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -89,7 +89,7 @@ export default function ProjectListDialog({ projects, loading, companyName, open
                     <TableCell className="text-sm">{g.kelompokDinas}</TableCell>
                     <TableCell className="text-sm">{g.satuanKerja}</TableCell>
                     <TableCell className="text-sm">{g.namaLPSE}</TableCell>
-                    <TableCell className="text-sm text-right font-mono">Rp {g.totalNilaiKontrak}</TableCell>
+                    <TableCell className="text-sm text-right">Rp {g.totalNilaiKontrak}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
