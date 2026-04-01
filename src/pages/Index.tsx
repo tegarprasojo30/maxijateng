@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPerusahaan, fetchProyek, type Perusahaan, type Proyek } from "@/lib/sheets";
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import CompanyDetailDialog from "@/components/CompanyDetailDialog";
@@ -95,25 +96,19 @@ export default function Index() {
         </div>
 
         {/* Filter */}
-        <div>
+        <div className="max-w-xs">
           <p className="text-sm font-semibold text-muted-foreground mb-2">Filter Kabupaten/Kota</p>
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => setFilter("all")}
-              className={`badge-filter ${filter === "all" ? "badge-filter-active" : "badge-filter-inactive"}`}
-            >
-              Semua
-            </button>
-            {filterOptions.map(opt => (
-              <button
-                key={opt}
-                onClick={() => setFilter(opt)}
-                className={`badge-filter ${filter === opt ? "badge-filter-active" : "badge-filter-inactive"}`}
-              >
-                {opt}
-              </button>
-            ))}
-          </div>
+          <Select value={filter} onValueChange={setFilter}>
+            <SelectTrigger>
+              <SelectValue placeholder="Pilih Kabupaten/Kota" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Semua Kabupaten/Kota</SelectItem>
+              {filterOptions.map(opt => (
+                <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Table */}
