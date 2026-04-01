@@ -143,7 +143,7 @@ export default function Index() {
                         {(page - 1) * PAGE_SIZE + i + 1}
                       </TableCell>
                       <TableCell className="text-sm">{c.kabupatenKota}</TableCell>
-                      <TableCell className="font-mono text-xs">{c.kodePenyedia}</TableCell>
+                      <TableCell className="text-sm">{c.kodePenyedia}</TableCell>
                       <TableCell className="text-sm font-medium">{c.namaPenyedia}</TableCell>
                       <TableCell>
                         <div className="flex items-center justify-center gap-2">
