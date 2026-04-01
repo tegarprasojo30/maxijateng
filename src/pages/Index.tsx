@@ -182,24 +182,20 @@ export default function Index() {
                 Menampilkan {Math.min((page - 1) * PAGE_SIZE + 1, filtered.length)}–{Math.min(page * PAGE_SIZE, filtered.length)} dari {filtered.length} perusahaan
               </p>
               <div className="flex items-center gap-1">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage(p => Math.max(1, p - 1))}
-                  disabled={page === 1}
-                >
+                <Button variant="outline" size="sm" onClick={() => setPage(1)} disabled={page === 1}>
+                  <ChevronsLeft className="h-4 w-4" />
+                </Button>
+                <Button variant="outline" size="sm" onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}>
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
                 <span className="px-3 text-sm font-medium">
                   {page} / {totalPages}
                 </span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                  disabled={page === totalPages}
-                >
+                <Button variant="outline" size="sm" onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}>
                   <ChevronRight className="h-4 w-4" />
+                </Button>
+                <Button variant="outline" size="sm" onClick={() => setPage(totalPages)} disabled={page === totalPages}>
+                  <ChevronsRight className="h-4 w-4" />
                 </Button>
               </div>
             </div>
