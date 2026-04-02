@@ -135,6 +135,6 @@ export async function fetchProyek(): Promise<Proyek[]> {
     namaLPSE: r[20] || '',
     nilaiKontrak: r[21] || '',
     sumberDana: r[29] || '', // Column AD (index 29)
-    tanggalPenetapan: r[30] || '', // Column AE (index 30)
+    tanggalPenetapan: r[28] || '', // Column AC (index 28)
   }));
 }
