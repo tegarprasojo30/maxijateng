@@ -3,10 +3,26 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/AppSidebar";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
+
+const AppLayout = ({ children }: { children: React.ReactNode }) => (
+  <SidebarProvider>
+    <div className="min-h-screen flex w-full">
+      <AppSidebar />
+      <div className="flex-1 flex flex-col min-w-0">
+        <header className="h-12 flex items-center border-b bg-card px-2">
+          <SidebarTrigger className="ml-1" />
+        </header>
+        <main className="flex-1">{children}</main>
+      </div>
+    </div>
+  </SidebarProvider>
+);
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -14,11 +30,12 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AppLayout>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AppLayout>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

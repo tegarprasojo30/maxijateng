@@ -51,6 +51,7 @@ export interface Perusahaan {
   fax: string;
   website: string;
   nomorPKP: string;
+  skalaUsaha: string;
 }
 
 export interface Proyek {
@@ -76,6 +77,8 @@ export interface Proyek {
   satuanKerja: string;
   namaLPSE: string;
   nilaiKontrak: string;
+  sumberDana: string;
+  tanggalPenetapan: string;
 }
 
 export async function fetchPerusahaan(): Promise<Perusahaan[]> {
@@ -99,6 +102,7 @@ export async function fetchPerusahaan(): Promise<Perusahaan[]> {
     fax: r[12] || '',
     website: r[13] || '',
     nomorPKP: r[14] || '',
+    skalaUsaha: r[20] || '', // Column U (index 20)
   }));
 }
 
@@ -130,5 +134,7 @@ export async function fetchProyek(): Promise<Proyek[]> {
     satuanKerja: r[19] || '',
     namaLPSE: r[20] || '',
     nilaiKontrak: r[21] || '',
+    sumberDana: r[29] || '', // Column AD (index 29)
+    tanggalPenetapan: r[30] || '', // Column AE (index 30)
   }));
 }
