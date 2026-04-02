@@ -1,4 +1,4 @@
-import { LayoutDashboard, TrendingUp, List, RefreshCw, AlertTriangle, Download, BookOpen, ChevronDown } from "lucide-react";
+import { LayoutDashboard, TrendingUp, List, RefreshCw, AlertTriangle, Download, BookOpen, ChevronDown, Database } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { NavLink } from "@/components/NavLink";
 import {
@@ -6,7 +6,6 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -16,6 +15,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { toast } from "sonner";
 
 const surveySubMenus = [
   { title: "Progres", icon: TrendingUp, suffix: "/progres" },
@@ -23,6 +23,11 @@ const surveySubMenus = [
   { title: "Ganti Sampel", icon: RefreshCw, suffix: "/ganti-sampel" },
   { title: "Anomali Data", icon: AlertTriangle, suffix: "/anomali-data" },
 ];
+
+function handleComingSoon(e: React.MouseEvent) {
+  e.preventDefault();
+  toast.info("Fitur belum tersedia");
+}
 
 export function AppSidebar() {
   const { state } = useSidebar();
@@ -39,9 +44,19 @@ export function AppSidebar() {
               {/* Dashboard */}
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to="/" end activeClassName="bg-sidebar-accent text-sidebar-primary font-semibold">
+                  <a href="#" onClick={handleComingSoon} className="flex items-center">
                     <LayoutDashboard className="h-4 w-4 mr-2" />
                     {!collapsed && <span>Dashboard</span>}
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              {/* Data LPSE */}
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink to="/" end activeClassName="bg-sidebar-accent text-sidebar-primary font-semibold">
+                    <Database className="h-4 w-4 mr-2" />
+                    {!collapsed && <span>Data LPSE</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -63,10 +78,10 @@ export function AppSidebar() {
                       {surveySubMenus.map(item => (
                         <SidebarMenuSubItem key={item.suffix}>
                           <SidebarMenuSubButton asChild>
-                            <NavLink to={`/skth-2025${item.suffix}`} activeClassName="bg-sidebar-accent text-sidebar-primary font-semibold">
+                            <a href="#" onClick={handleComingSoon} className="flex items-center">
                               <item.icon className="h-3.5 w-3.5 mr-2" />
                               <span>{item.title}</span>
-                            </NavLink>
+                            </a>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                       ))}
@@ -92,10 +107,10 @@ export function AppSidebar() {
                       {surveySubMenus.map(item => (
                         <SidebarMenuSubItem key={item.suffix}>
                           <SidebarMenuSubButton asChild>
-                            <NavLink to={`/sktr-2026${item.suffix}`} activeClassName="bg-sidebar-accent text-sidebar-primary font-semibold">
+                            <a href="#" onClick={handleComingSoon} className="flex items-center">
                               <item.icon className="h-3.5 w-3.5 mr-2" />
                               <span>{item.title}</span>
-                            </NavLink>
+                            </a>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                       ))}
@@ -107,20 +122,20 @@ export function AppSidebar() {
               {/* Download */}
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to="/download" activeClassName="bg-sidebar-accent text-sidebar-primary font-semibold">
+                  <a href="#" onClick={handleComingSoon} className="flex items-center">
                     <Download className="h-4 w-4 mr-2" />
                     {!collapsed && <span>Download</span>}
-                  </NavLink>
+                  </a>
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
               {/* Pedoman */}
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to="/pedoman" activeClassName="bg-sidebar-accent text-sidebar-primary font-semibold">
+                  <a href="#" onClick={handleComingSoon} className="flex items-center">
                     <BookOpen className="h-4 w-4 mr-2" />
                     {!collapsed && <span>Pedoman</span>}
-                  </NavLink>
+                  </a>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
