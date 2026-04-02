@@ -17,6 +17,8 @@ interface GroupedProject {
   kelompokDinas: string;
   satuanKerja: string;
   namaLPSE: string;
+  sumberDana: string;
+  tanggalPenetapan: string;
   totalNilaiKontrak: string;
   status: string;
   count: number;
@@ -35,6 +37,8 @@ function groupByKodeRUP(projects: Proyek[]): GroupedProject[] {
         kelompokDinas: p.kelompokDinas,
         satuanKerja: p.satuanKerja,
         namaLPSE: p.namaLPSE,
+        sumberDana: p.sumberDana,
+        tanggalPenetapan: p.tanggalPenetapan,
         totalNilaiKontrak: p.nilaiKontrak,
         status: p.status,
         count: 1,
@@ -49,9 +53,9 @@ export default function ProjectListDialog({ projects, loading, companyName, open
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-5xl max-h-[85vh] overflow-y-auto">
+      <DialogContent className="max-w-6xl max-h-[85vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 font-[var(--font-heading)] text-lg">
+          <DialogTitle className="flex items-center gap-2 text-lg">
             <FolderOpen className="h-5 w-5 text-secondary" />
             Daftar Proyek — {companyName}
           </DialogTitle>
@@ -67,7 +71,7 @@ export default function ProjectListDialog({ projects, loading, companyName, open
             Tidak ada proyek ditemukan untuk perusahaan ini.
           </div>
         ) : (
-          <div className="rounded-lg border overflow-hidden">
+          <div className="rounded-lg border overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow className="bg-muted/50">
@@ -77,6 +81,8 @@ export default function ProjectListDialog({ projects, loading, companyName, open
                   <TableHead className="font-semibold">Kelompok Dinas</TableHead>
                   <TableHead className="font-semibold">Satuan Kerja</TableHead>
                   <TableHead className="font-semibold">Nama LPSE</TableHead>
+                  <TableHead className="font-semibold">Sumber Dana</TableHead>
+                  <TableHead className="font-semibold">Tgl Penetapan</TableHead>
                   <TableHead className="font-semibold">Nilai Kontrak</TableHead>
                 </TableRow>
               </TableHeader>
@@ -89,6 +95,8 @@ export default function ProjectListDialog({ projects, loading, companyName, open
                     <TableCell className="text-sm">{g.kelompokDinas}</TableCell>
                     <TableCell className="text-sm">{g.satuanKerja}</TableCell>
                     <TableCell className="text-sm">{g.namaLPSE}</TableCell>
+                    <TableCell className="text-sm">{g.sumberDana}</TableCell>
+                    <TableCell className="text-sm">{g.tanggalPenetapan}</TableCell>
                     <TableCell className="text-sm text-right">Rp {g.totalNilaiKontrak}</TableCell>
                   </TableRow>
                 ))}

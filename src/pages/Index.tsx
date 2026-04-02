@@ -1,13 +1,14 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchPerusahaan, fetchProyek, type Perusahaan, type Proyek } from "@/lib/sheets";
+import { fetchPerusahaan, fetchProyek, type Perusahaan } from "@/lib/sheets";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import CompanyDetailDialog from "@/components/CompanyDetailDialog";
 import ProjectListDialog from "@/components/ProjectListDialog";
-import { Building2, Eye, FolderOpen, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Search, Loader2, HardHat } from "lucide-react";
+import { Eye, FolderOpen, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Search, Loader2, HardHat } from "lucide-react";
+import { useEffect } from "react";
 
 const PAGE_SIZE = 15;
 
@@ -30,7 +31,6 @@ export default function Index() {
   const [detailCompany, setDetailCompany] = useState<Perusahaan | null>(null);
   const [projectCompany, setProjectCompany] = useState<Perusahaan | null>(null);
 
-  // Get unique Kabupaten/Kota values (column C)
   const filterOptions = useMemo(() => {
     const set = new Set<string>();
     companies.forEach(c => {
@@ -39,7 +39,22 @@ export default function Index() {
     return Array.from(set).sort();
   }, [companies]);
 
-  // Filter and search
+  // Count projects per company per period (placeholder logic - adjust based on actual data)
+  const projectCounts = useMemo(() => {
+    const counts = new Map<string, { y2025: number; tw1: number; tw2: number; tw3: number; tw4: number }>();
+    allProjects.forEach(p => {
+      const key = p.kodePenyedia;
+      if (!counts.has(key)) {
+        counts.set(key, { y2025: 0, tw1: 0, tw2: 0, tw3: 0, tw4: 0 });
+      }
+      const c = counts.get(key)!;
+      // Simple classification based on status or date - count all as 2025 for now
+      // You can refine this logic based on actual date/period columns
+      c.y2025++;
+    });
+    return counts;
+  }, [allProjects]);
+
   const filtered = useMemo(() => {
     let result = companies;
     if (filter !== "all") {
@@ -63,7 +78,6 @@ export default function Index() {
 
   useEffect(() => { setPage(1); }, [filter, search]);
 
-  // Projects for selected company
   const companyProjects = useMemo(() => {
     if (!projectCompany) return [];
     return allProjects.filter(p => p.kodePenyedia === projectCompany.kodePenyedia);
@@ -72,46 +86,45 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="construction-header py-8 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center gap-3 mb-2">
-            <HardHat className="h-8 w-8" />
-            <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
+      <header className="construction-header py-6 px-4">
+        <div className="max-w-full mx-auto">
+          <div className="flex items-center gap-3 mb-1">
+            <HardHat className="h-7 w-7" />
+            <h1 className="text-xl md:text-2xl font-bold tracking-tight">
               Database Perusahaan Konstruksi
             </h1>
           </div>
-          <p className="text-sm opacity-80 ml-11">
+          <p className="text-sm opacity-80 ml-10">
             Provinsi Jawa Tengah — Data dari LPSE
           </p>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-6 space-y-6">
-        {/* Search */}
-        <div className="relative max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Cari nama atau kode penyedia..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-
-        {/* Filter */}
-        <div className="max-w-xs">
-          <p className="text-sm font-semibold text-muted-foreground mb-2">Filter Kabupaten/Kota</p>
-          <Select value={filter} onValueChange={setFilter}>
-            <SelectTrigger>
-              <SelectValue placeholder="Pilih Kabupaten/Kota" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Semua Kabupaten/Kota</SelectItem>
-              {filterOptions.map(opt => (
-                <SelectItem key={opt} value={opt}>{opt}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+      <main className="max-w-full mx-auto px-4 py-6 space-y-4">
+        {/* Search & Filter Row */}
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Cari nama atau kode penyedia..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+          <div className="w-64">
+            <Select value={filter} onValueChange={setFilter}>
+              <SelectTrigger>
+                <SelectValue placeholder="Pilih Kabupaten/Kota" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Semua Kabupaten/Kota</SelectItem>
+                {filterOptions.map(opt => (
+                  <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         {/* Table */}
@@ -121,57 +134,75 @@ export default function Index() {
             <span className="ml-3 text-muted-foreground font-medium">Memuat data perusahaan...</span>
           </div>
         ) : (
-          <div className="rounded-xl border bg-card shadow-sm overflow-hidden">
+          <div className="rounded-xl border bg-card shadow-sm overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow className="bg-muted/50">
-                  <TableHead className="font-semibold w-12">#</TableHead>
-                  <TableHead className="font-semibold">Kabupaten/Kota</TableHead>
-                  <TableHead className="font-semibold">Kode Penyedia</TableHead>
-                  <TableHead className="font-semibold">Nama Penyedia</TableHead>
-                  <TableHead className="font-semibold text-center">Aksi</TableHead>
+                  <TableHead rowSpan={2} className="font-semibold w-12 align-middle border-r">#</TableHead>
+                  <TableHead rowSpan={2} className="font-semibold align-middle border-r">Kabupaten/Kota</TableHead>
+                  <TableHead rowSpan={2} className="font-semibold align-middle border-r">Kode Penyedia</TableHead>
+                  <TableHead rowSpan={2} className="font-semibold align-middle border-r">Nama Penyedia</TableHead>
+                  <TableHead rowSpan={2} className="font-semibold align-middle border-r">Skala Usaha</TableHead>
+                  <TableHead colSpan={5} className="font-semibold text-center border-r">Jumlah Proyek</TableHead>
+                  <TableHead rowSpan={2} className="font-semibold text-center align-middle">Aksi</TableHead>
+                </TableRow>
+                <TableRow className="bg-muted/30">
+                  <TableHead className="font-medium text-center text-xs border-r">2025</TableHead>
+                  <TableHead className="font-medium text-center text-xs border-r">2026 Tw I</TableHead>
+                  <TableHead className="font-medium text-center text-xs border-r">2026 Tw II</TableHead>
+                  <TableHead className="font-medium text-center text-xs border-r">2026 Tw III</TableHead>
+                  <TableHead className="font-medium text-center text-xs border-r">2026 Tw IV</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {paged.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center py-12 text-muted-foreground">
+                    <TableCell colSpan={11} className="text-center py-12 text-muted-foreground">
                       Tidak ada data ditemukan.
                     </TableCell>
                   </TableRow>
                 ) : (
-                  paged.map((c, i) => (
-                    <TableRow key={c.kodePenyedia + i} className="table-row-hover">
-                      <TableCell className="text-muted-foreground text-xs">
-                        {(page - 1) * PAGE_SIZE + i + 1}
-                      </TableCell>
-                      <TableCell className="text-sm">{c.kabupatenKota}</TableCell>
-                      <TableCell className="text-sm">{c.kodePenyedia}</TableCell>
-                      <TableCell className="text-sm font-medium">{c.namaPenyedia}</TableCell>
-                      <TableCell>
-                        <div className="flex items-center justify-center gap-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setDetailCompany(c)}
-                            className="gap-1.5"
-                          >
-                            <Eye className="h-3.5 w-3.5" />
-                            <span className="hidden sm:inline">Detail</span>
-                          </Button>
-                          <Button
-                            variant="secondary"
-                            size="sm"
-                            onClick={() => setProjectCompany(c)}
-                            className="gap-1.5"
-                          >
-                            <FolderOpen className="h-3.5 w-3.5" />
-                            <span className="hidden sm:inline">Proyek</span>
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))
+                  paged.map((c, i) => {
+                    const counts = projectCounts.get(c.kodePenyedia) || { y2025: 0, tw1: 0, tw2: 0, tw3: 0, tw4: 0 };
+                    return (
+                      <TableRow key={c.kodePenyedia + i} className="table-row-hover">
+                        <TableCell className="text-muted-foreground text-xs border-r">
+                          {(page - 1) * PAGE_SIZE + i + 1}
+                        </TableCell>
+                        <TableCell className="text-sm border-r">{c.kabupatenKota}</TableCell>
+                        <TableCell className="text-sm border-r">{c.kodePenyedia}</TableCell>
+                        <TableCell className="text-sm font-medium border-r">{c.namaPenyedia}</TableCell>
+                        <TableCell className="text-sm border-r">{c.skalaUsaha}</TableCell>
+                        <TableCell className="text-sm text-center border-r">{counts.y2025 || '-'}</TableCell>
+                        <TableCell className="text-sm text-center border-r">{counts.tw1 || '-'}</TableCell>
+                        <TableCell className="text-sm text-center border-r">{counts.tw2 || '-'}</TableCell>
+                        <TableCell className="text-sm text-center border-r">{counts.tw3 || '-'}</TableCell>
+                        <TableCell className="text-sm text-center border-r">{counts.tw4 || '-'}</TableCell>
+                        <TableCell>
+                          <div className="flex items-center justify-center gap-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setDetailCompany(c)}
+                              className="gap-1.5"
+                            >
+                              <Eye className="h-3.5 w-3.5" />
+                              <span className="hidden sm:inline">Detail</span>
+                            </Button>
+                            <Button
+                              variant="secondary"
+                              size="sm"
+                              onClick={() => setProjectCompany(c)}
+                              className="gap-1.5"
+                            >
+                              <FolderOpen className="h-3.5 w-3.5" />
+                              <span className="hidden sm:inline">Proyek</span>
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
                 )}
               </TableBody>
             </Table>
