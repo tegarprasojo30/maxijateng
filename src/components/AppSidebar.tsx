@@ -51,7 +51,7 @@ export function AppSidebar() {
             <img
               src="https://i.ibb.co.com/gLVCpHJR/Chat-GPT-Image-Apr-6-2026-12-23-59-PM.png"
               alt="Logo Monev"
-              className="w-16 h-16 object-contain rounded-lg"
+              className="w-24 h-24 object-contain rounded-lg"
             />
             <p className="text-xs text-center leading-tight text-sidebar-foreground font-medium opacity-90">
               Monitoring dan Evaluasi Survei Statistik Konstruksi Jawa Tengah
