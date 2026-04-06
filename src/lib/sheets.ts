@@ -81,6 +81,17 @@ export interface Proyek {
   tanggalPenetapan: string;
 }
 
+export interface ProgressSKTH {
+  kabupatenKota: string;
+  targetSampel: number;
+  open: number;
+  submittedByPencacah: number;
+  approvedByPengawas: number;
+  rejectedByPengawas: number;
+  completedByAdmin: number;
+  progres: string;
+}
+
 export async function fetchPerusahaan(): Promise<Perusahaan[]> {
   const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=PERUSAHAAN`;
   const res = await fetch(url);
@@ -102,7 +113,7 @@ export async function fetchPerusahaan(): Promise<Perusahaan[]> {
     fax: r[12] || '',
     website: r[13] || '',
     nomorPKP: r[14] || '',
-    skalaUsaha: r[20] || '', // Column U (index 20)
+    skalaUsaha: r[20] || '',
   }));
 }
 
@@ -134,7 +145,24 @@ export async function fetchProyek(): Promise<Proyek[]> {
     satuanKerja: r[19] || '',
     namaLPSE: r[20] || '',
     nilaiKontrak: r[21] || '',
-    sumberDana: r[29] || '', // Column AD (index 29)
-    tanggalPenetapan: r[28] || '', // Column AC (index 28)
+    sumberDana: r[29] || '',
+    tanggalPenetapan: r[28] || '',
+  }));
+}
+
+export async function fetchProgressSKTH(): Promise<ProgressSKTH[]> {
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=PROGRESSKTH`;
+  const res = await fetch(url);
+  const csv = await res.text();
+  const rows = parseCSV(csv);
+  return rows.slice(1).map(r => ({
+    kabupatenKota: r[0] || '',
+    targetSampel: parseInt(r[1] || '0', 10),
+    open: parseInt(r[2] || '0', 10),
+    submittedByPencacah: parseInt(r[3] || '0', 10),
+    approvedByPengawas: parseInt(r[4] || '0', 10),
+    rejectedByPengawas: parseInt(r[5] || '0', 10),
+    completedByAdmin: parseInt(r[6] || '0', 10),
+    progres: r[7] || '0%',
   }));
 }
