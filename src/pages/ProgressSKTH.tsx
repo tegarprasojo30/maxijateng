@@ -60,18 +60,18 @@ export default function ProgressSKTHPage() {
                   const isJawaTengah = row.kabupatenKota.toUpperCase().includes('JAWA TENGAH');
                   return (
                     <TableRow key={i} className={isJawaTengah ? "bg-muted/50 font-bold" : "table-row-hover"}>
-                      <TableCell className="text-muted-foreground text-xs border-r">{isJawaTengah ? '' : (i + 1)}</TableCell>
-                      <TableCell className="text-sm font-medium border-r">{row.kabupatenKota}</TableCell>
-                      <TableCell className="text-sm text-center border-r">{row.targetSampel}</TableCell>
-                      <TableCell className="text-sm text-center border-r">{row.open}</TableCell>
-                      <TableCell className="text-sm text-center border-r">{row.submittedByPencacah}</TableCell>
-                      <TableCell className="text-sm text-center border-r">{row.approvedByPengawas}</TableCell>
-                      <TableCell className="text-sm text-center border-r">{row.rejectedByPengawas}</TableCell>
-                      <TableCell className="text-sm text-center border-r">{row.completedByAdmin}</TableCell>
+                      <TableCell className={`text-xs border-r ${isJawaTengah ? 'font-bold' : 'text-muted-foreground'}`}>{isJawaTengah ? '' : (i + 1)}</TableCell>
+                      <TableCell className={`text-sm border-r ${isJawaTengah ? 'font-bold' : 'font-medium'}`}>{row.kabupatenKota}</TableCell>
+                      <TableCell className={`text-sm text-center border-r ${isJawaTengah ? 'font-bold' : ''}`}>{row.targetSampel}</TableCell>
+                      <TableCell className={`text-sm text-center border-r ${isJawaTengah ? 'font-bold' : ''}`}>{row.open}</TableCell>
+                      <TableCell className={`text-sm text-center border-r ${isJawaTengah ? 'font-bold' : ''}`}>{row.submittedByPencacah}</TableCell>
+                      <TableCell className={`text-sm text-center border-r ${isJawaTengah ? 'font-bold' : ''}`}>{row.approvedByPengawas}</TableCell>
+                      <TableCell className={`text-sm text-center border-r ${isJawaTengah ? 'font-bold' : ''}`}>{row.rejectedByPengawas}</TableCell>
+                      <TableCell className={`text-sm text-center border-r ${isJawaTengah ? 'font-bold' : ''}`}>{row.completedByAdmin}</TableCell>
                       <TableCell className="text-sm">
                         <div className="flex items-center gap-2">
                           <Progress value={pVal} className="h-2.5 flex-1 bg-muted" />
-                          <span className="text-xs font-medium min-w-[42px] text-right">{row.progres}</span>
+                          <span className={`text-xs min-w-[42px] text-right ${isJawaTengah ? 'font-bold' : 'font-medium'}`}>{row.progres}</span>
                         </div>
                       </TableCell>
                     </TableRow>

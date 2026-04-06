@@ -47,7 +47,7 @@ export function AppSidebar() {
       <SidebarContent className="pt-2">
         {/* Logo & Title */}
         {!collapsed && (
-          <div className="px-4 py-3 flex flex-col items-center gap-2 border-b border-sidebar-border mb-2">
+          <div className="px-4 pt-1 pb-3 flex flex-col items-center gap-2 border-b border-sidebar-border mb-2">
             <img
               src="https://i.ibb.co.com/gLVCpHJR/Chat-GPT-Image-Apr-6-2026-12-23-59-PM.png"
               alt="Logo Monev"
