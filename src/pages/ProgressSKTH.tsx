@@ -16,22 +16,6 @@ export default function ProgressSKTHPage() {
     return isNaN(num) ? 0 : num;
   };
 
-  const totals = progressData.reduce(
-    (acc, r) => ({
-      targetSampel: acc.targetSampel + r.targetSampel,
-      open: acc.open + r.open,
-      submittedByPencacah: acc.submittedByPencacah + r.submittedByPencacah,
-      approvedByPengawas: acc.approvedByPengawas + r.approvedByPengawas,
-      rejectedByPengawas: acc.rejectedByPengawas + r.rejectedByPengawas,
-      completedByAdmin: acc.completedByAdmin + r.completedByAdmin,
-    }),
-    { targetSampel: 0, open: 0, submittedByPencacah: 0, approvedByPengawas: 0, rejectedByPengawas: 0, completedByAdmin: 0 }
-  );
-
-  const totalProgress = totals.targetSampel > 0
-    ? ((totals.completedByAdmin / totals.targetSampel) * 100)
-    : 0;
-
   return (
     <div className="min-h-screen bg-background">
       <header className="construction-header py-6 px-4">
