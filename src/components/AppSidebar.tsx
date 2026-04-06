@@ -17,7 +17,14 @@ import {
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { toast } from "sonner";
 
-const surveySubMenus = [
+const skthSubMenus = [
+  { title: "Progres", icon: TrendingUp, path: "/skth-2025/progres" },
+  { title: "Daftar Sampel", icon: List, suffix: "/daftar-sampel" },
+  { title: "Ganti Sampel", icon: RefreshCw, suffix: "/ganti-sampel" },
+  { title: "Anomali Data", icon: AlertTriangle, suffix: "/anomali-data" },
+];
+
+const sktrSubMenus = [
   { title: "Progres", icon: TrendingUp, suffix: "/progres" },
   { title: "Daftar Sampel", icon: List, suffix: "/daftar-sampel" },
   { title: "Ganti Sampel", icon: RefreshCw, suffix: "/ganti-sampel" },
@@ -37,7 +44,30 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarContent className="pt-4">
+      <SidebarContent className="pt-2">
+        {/* Logo & Title */}
+        {!collapsed && (
+          <div className="px-4 py-3 flex flex-col items-center gap-2 border-b border-sidebar-border mb-2">
+            <img
+              src="https://i.ibb.co.com/gLVCpHJR/Chat-GPT-Image-Apr-6-2026-12-23-59-PM.png"
+              alt="Logo Monev"
+              className="w-16 h-16 object-contain rounded-lg"
+            />
+            <p className="text-xs text-center leading-tight text-sidebar-foreground font-medium opacity-90">
+              Monitoring dan Evaluasi Survei Statistik Konstruksi Jawa Tengah
+            </p>
+          </div>
+        )}
+        {collapsed && (
+          <div className="flex justify-center py-3 border-b border-sidebar-border mb-2">
+            <img
+              src="https://i.ibb.co.com/gLVCpHJR/Chat-GPT-Image-Apr-6-2026-12-23-59-PM.png"
+              alt="Logo"
+              className="w-8 h-8 object-contain rounded"
+            />
+          </div>
+        )}
+
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -75,13 +105,20 @@ export function AppSidebar() {
                   </CollapsibleTrigger>
                   <CollapsibleContent>
                     <SidebarMenuSub>
-                      {surveySubMenus.map(item => (
-                        <SidebarMenuSubItem key={item.suffix}>
+                      {skthSubMenus.map(item => (
+                        <SidebarMenuSubItem key={item.title}>
                           <SidebarMenuSubButton asChild>
-                            <a href="#" onClick={handleComingSoon} className="flex items-center">
-                              <item.icon className="h-3.5 w-3.5 mr-2" />
-                              <span>{item.title}</span>
-                            </a>
+                            {item.path ? (
+                              <NavLink to={item.path} activeClassName="bg-sidebar-accent text-sidebar-primary font-semibold">
+                                <item.icon className="h-3.5 w-3.5 mr-2" />
+                                <span>{item.title}</span>
+                              </NavLink>
+                            ) : (
+                              <a href="#" onClick={handleComingSoon} className="flex items-center">
+                                <item.icon className="h-3.5 w-3.5 mr-2" />
+                                <span>{item.title}</span>
+                              </a>
+                            )}
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                       ))}
@@ -104,8 +141,8 @@ export function AppSidebar() {
                   </CollapsibleTrigger>
                   <CollapsibleContent>
                     <SidebarMenuSub>
-                      {surveySubMenus.map(item => (
-                        <SidebarMenuSubItem key={item.suffix}>
+                      {sktrSubMenus.map(item => (
+                        <SidebarMenuSubItem key={item.title}>
                           <SidebarMenuSubButton asChild>
                             <a href="#" onClick={handleComingSoon} className="flex items-center">
                               <item.icon className="h-3.5 w-3.5 mr-2" />
