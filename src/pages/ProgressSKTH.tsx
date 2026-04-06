@@ -16,22 +16,6 @@ export default function ProgressSKTHPage() {
     return isNaN(num) ? 0 : num;
   };
 
-  const totals = progressData.reduce(
-    (acc, r) => ({
-      targetSampel: acc.targetSampel + r.targetSampel,
-      open: acc.open + r.open,
-      submittedByPencacah: acc.submittedByPencacah + r.submittedByPencacah,
-      approvedByPengawas: acc.approvedByPengawas + r.approvedByPengawas,
-      rejectedByPengawas: acc.rejectedByPengawas + r.rejectedByPengawas,
-      completedByAdmin: acc.completedByAdmin + r.completedByAdmin,
-    }),
-    { targetSampel: 0, open: 0, submittedByPencacah: 0, approvedByPengawas: 0, rejectedByPengawas: 0, completedByAdmin: 0 }
-  );
-
-  const totalProgress = totals.targetSampel > 0
-    ? ((totals.completedByAdmin / totals.targetSampel) * 100)
-    : 0;
-
   return (
     <div className="min-h-screen bg-background">
       <header className="construction-header py-6 px-4">
@@ -73,9 +57,10 @@ export default function ProgressSKTHPage() {
               <TableBody>
                 {progressData.map((row, i) => {
                   const pVal = parseProgress(row.progres);
+                  const isJawaTengah = row.kabupatenKota.toUpperCase().includes('JAWA TENGAH');
                   return (
-                    <TableRow key={i} className="table-row-hover">
-                      <TableCell className="text-muted-foreground text-xs border-r">{i + 1}</TableCell>
+                    <TableRow key={i} className={isJawaTengah ? "bg-muted/50 font-bold" : "table-row-hover"}>
+                      <TableCell className="text-muted-foreground text-xs border-r">{isJawaTengah ? '' : (i + 1)}</TableCell>
                       <TableCell className="text-sm font-medium border-r">{row.kabupatenKota}</TableCell>
                       <TableCell className="text-sm text-center border-r">{row.targetSampel}</TableCell>
                       <TableCell className="text-sm text-center border-r">{row.open}</TableCell>
@@ -92,23 +77,6 @@ export default function ProgressSKTHPage() {
                     </TableRow>
                   );
                 })}
-                {/* Totals Row */}
-                <TableRow className="bg-muted/50 font-semibold">
-                  <TableCell className="border-r"></TableCell>
-                  <TableCell className="text-sm border-r">TOTAL</TableCell>
-                  <TableCell className="text-sm text-center border-r">{totals.targetSampel}</TableCell>
-                  <TableCell className="text-sm text-center border-r">{totals.open}</TableCell>
-                  <TableCell className="text-sm text-center border-r">{totals.submittedByPencacah}</TableCell>
-                  <TableCell className="text-sm text-center border-r">{totals.approvedByPengawas}</TableCell>
-                  <TableCell className="text-sm text-center border-r">{totals.rejectedByPengawas}</TableCell>
-                  <TableCell className="text-sm text-center border-r">{totals.completedByAdmin}</TableCell>
-                  <TableCell className="text-sm">
-                    <div className="flex items-center gap-2">
-                      <Progress value={totalProgress} className="h-2.5 flex-1 bg-muted" />
-                      <span className="text-xs font-medium min-w-[42px] text-right">{totalProgress.toFixed(2).replace('.', ',')}%</span>
-                    </div>
-                  </TableCell>
-                </TableRow>
               </TableBody>
             </Table>
           </div>
