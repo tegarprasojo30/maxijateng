@@ -53,9 +53,6 @@ export function AppSidebar() {
               alt="Logo Monev"
               className="w-48 h-48 object-contain rounded-lg"
             />
-            <p className="text-xs text-center leading-tight text-sidebar-foreground font-medium opacity-90">
-              Monitoring dan Evaluasi Survei Statistik Konstruksi Jawa Tengah
-            </p>
           </div>
         )}
         {collapsed && (
