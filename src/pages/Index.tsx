@@ -41,7 +41,7 @@ export default function Index() {
   }, [companies]);
 
   const skalaOptions = useMemo(() => {
-    const order = ["KECIL", "MENENGAH", "BESAR", "Non SF"];
+    const order = ["Kecil", "Menengah", "Besar", "-"];
     const available = new Set<string>();
     companies.forEach(c => {
       if (c.skalaUsaha) available.add(c.skalaUsaha);
