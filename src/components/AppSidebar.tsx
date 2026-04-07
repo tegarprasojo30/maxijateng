@@ -51,7 +51,7 @@ export function AppSidebar() {
             <img
               src="https://i.ibb.co/k68sM7PM/maxijateng.png"
               alt="Logo Monev"
-              className="w-48 h-48 object-contain rounded-lg"
+              className="w-48 h-32 object-contain rounded-lg"
             />
           </div>
         )}
@@ -60,7 +60,7 @@ export function AppSidebar() {
             <img
               src="https://i.ibb.co/k68sM7PM/maxijateng.png"
               alt="Logo"
-              className="w-8 h-8 object-contain rounded"
+              className="w-8 h-4 object-contain rounded"
             />
           </div>
         )}
