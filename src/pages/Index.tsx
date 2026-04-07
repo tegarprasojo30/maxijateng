@@ -160,9 +160,9 @@ export default function Index() {
             <span className="ml-3 text-muted-foreground font-medium">Memuat data perusahaan...</span>
           </div>
         ) : (
-          <div className="rounded-xl border bg-card shadow-sm overflow-x-auto">
+          <div className="rounded-xl border bg-card shadow-sm overflow-auto max-h-[calc(100vh-280px)]">
             <Table>
-              <TableHeader>
+              <TableHeader className="sticky top-0 z-10 bg-card shadow-sm">
                 <TableRow className="bg-muted/50">
                   <TableHead rowSpan={2} className="font-semibold w-12 align-middle border-r">#</TableHead>
                   <TableHead rowSpan={2} className="font-semibold align-middle border-r">Kabupaten/Kota</TableHead>
