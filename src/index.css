@@ -38,13 +38,13 @@
 
     --radius: 0.625rem;
 
-    --sidebar-background: 0 0% 0%;
-    --sidebar-foreground: 230 30% 90%;
-    --sidebar-primary: 225 70% 60%;
+    --sidebar-background: 220 70% 45%;
+    --sidebar-foreground: 210 40% 95%;
+    --sidebar-primary: 210 90% 70%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 250 40% 28%;
-    --sidebar-accent-foreground: 230 30% 90%;
-    --sidebar-border: 250 35% 30%;
+    --sidebar-accent: 225 65% 38%;
+    --sidebar-accent-foreground: 210 40% 95%;
+    --sidebar-border: 220 60% 38%;
     --sidebar-ring: 225 70% 60%;
 
     --font-heading: 'Inter', 'Product Sans', sans-serif;
