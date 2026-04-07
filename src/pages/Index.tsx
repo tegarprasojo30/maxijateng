@@ -165,8 +165,8 @@ export default function Index() {
                 <TableRow className="bg-muted/50">
                   <TableHead rowSpan={2} className="font-semibold w-12 align-middle border-r">#</TableHead>
                   <TableHead rowSpan={2} className="font-semibold align-middle border-r">Kabupaten/Kota</TableHead>
-                  <TableHead rowSpan={2} className="font-semibold align-middle border-r">Kode Penyedia</TableHead>
                   <TableHead rowSpan={2} className="font-semibold align-middle border-r">Nama Penyedia</TableHead>
+                  <TableHead rowSpan={2} className="font-semibold align-middle border-r">Alamat</TableHead>
                   <TableHead rowSpan={2} className="font-semibold align-middle border-r">Skala Usaha</TableHead>
                   <TableHead colSpan={5} className="font-semibold text-center border-r">Jumlah Proyek</TableHead>
                   <TableHead rowSpan={2} className="font-semibold text-center align-middle">Aksi</TableHead>
@@ -195,8 +195,8 @@ export default function Index() {
                           {(page - 1) * PAGE_SIZE + i + 1}
                         </TableCell>
                         <TableCell className="text-sm border-r">{c.kabupatenKota}</TableCell>
-                        <TableCell className="text-sm border-r">{c.kodePenyedia}</TableCell>
                         <TableCell className="text-sm font-medium border-r">{c.namaPenyedia}</TableCell>
+                        <TableCell className="text-sm border-r">{c.alamat}</TableCell>
                         <TableCell className="text-sm border-r">{c.skalaUsaha}</TableCell>
                         <TableCell className="text-sm text-center border-r">{counts.y2025 || '-'}</TableCell>
                         <TableCell className="text-sm text-center border-r">{counts.tw1 || '-'}</TableCell>

@@ -38,13 +38,13 @@
 
     --radius: 0.625rem;
 
-    --sidebar-background: 220 70% 45%;
-    --sidebar-foreground: 210 40% 95%;
-    --sidebar-primary: 210 90% 70%;
+    --sidebar-background: 220 55% 18%;
+    --sidebar-foreground: 210 40% 92%;
+    --sidebar-primary: 210 80% 65%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 225 65% 38%;
+    --sidebar-accent: 220 50% 25%;
     --sidebar-accent-foreground: 210 40% 95%;
-    --sidebar-border: 220 60% 38%;
+    --sidebar-border: 220 45% 22%;
     --sidebar-ring: 225 70% 60%;
 
     --font-heading: 'Inter', 'Product Sans', sans-serif;
@@ -99,7 +99,7 @@
 
 @layer utilities {
   [data-sidebar="sidebar"] {
-    background: linear-gradient(180deg, hsl(220 70% 48%) 0%, hsl(210 80% 38%) 50%, hsl(225 65% 30%) 100%) !important;
+    background: linear-gradient(180deg, hsl(220 50% 22%) 0%, hsl(215 55% 16%) 50%, hsl(225 60% 12%) 100%) !important;
   }
 }
 
