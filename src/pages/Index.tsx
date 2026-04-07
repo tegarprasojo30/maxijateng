@@ -27,6 +27,7 @@ export default function Index() {
 
   const [filter, setFilter] = useState<string>("all");
   const [search, setSearch] = useState("");
+  const [skalaFilter, setSkalaFilter] = useState<string>("all");
   const [page, setPage] = useState(1);
   const [detailCompany, setDetailCompany] = useState<Perusahaan | null>(null);
   const [projectCompany, setProjectCompany] = useState<Perusahaan | null>(null);
@@ -35,6 +36,14 @@ export default function Index() {
     const set = new Set<string>();
     companies.forEach(c => {
       if (c.kabupatenKota && c.kabupatenKota.startsWith("[")) set.add(c.kabupatenKota);
+    });
+    return Array.from(set).sort();
+  }, [companies]);
+
+  const skalaOptions = useMemo(() => {
+    const set = new Set<string>();
+    companies.forEach(c => {
+      if (c.skalaUsaha) set.add(c.skalaUsaha);
     });
     return Array.from(set).sort();
   }, [companies]);
@@ -60,6 +69,9 @@ export default function Index() {
     if (filter !== "all") {
       result = result.filter(c => c.kabupatenKota === filter);
     }
+    if (skalaFilter !== "all") {
+      result = result.filter(c => c.skalaUsaha === skalaFilter);
+    }
     if (search.trim()) {
       const q = search.toLowerCase();
       result = result.filter(c =>
@@ -71,12 +83,12 @@ export default function Index() {
       result = [...result].sort((a, b) => a.kabupatenKota.localeCompare(b.kabupatenKota));
     }
     return result;
-  }, [companies, filter, search]);
+  }, [companies, filter, skalaFilter, search]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
-  useEffect(() => { setPage(1); }, [filter, search]);
+  useEffect(() => { setPage(1); }, [filter, skalaFilter, search]);
 
   const companyProjects = useMemo(() => {
     if (!projectCompany) return [];
@@ -120,6 +132,19 @@ export default function Index() {
               <SelectContent>
                 <SelectItem value="all">Semua Kabupaten/Kota</SelectItem>
                 {filterOptions.map(opt => (
+                  <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="w-52">
+            <Select value={skalaFilter} onValueChange={setSkalaFilter}>
+              <SelectTrigger>
+                <SelectValue placeholder="Pilih Skala Usaha" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Semua Skala Usaha</SelectItem>
+                {skalaOptions.map(opt => (
                   <SelectItem key={opt} value={opt}>{opt}</SelectItem>
                 ))}
               </SelectContent>
