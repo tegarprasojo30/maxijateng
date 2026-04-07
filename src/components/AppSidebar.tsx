@@ -49,7 +49,7 @@ export function AppSidebar() {
         {!collapsed && (
           <div className="px-4 pt-1 pb-3 flex flex-col items-center gap-2 border-b border-sidebar-border mb-2">
             <img
-              src="https://i.ibb.co.com/gLVCpHJR/Chat-GPT-Image-Apr-6-2026-12-23-59-PM.png"
+              src="https://i.ibb.co.com/zhjmndGW/maxi.png"
               alt="Logo Monev"
               className="w-48 h-48 object-contain rounded-lg"
             />
@@ -61,7 +61,7 @@ export function AppSidebar() {
         {collapsed && (
           <div className="flex justify-center py-3 border-b border-sidebar-border mb-2">
             <img
-              src="https://i.ibb.co.com/gLVCpHJR/Chat-GPT-Image-Apr-6-2026-12-23-59-PM.png"
+              src="https://i.ibb.co.com/zhjmndGW/maxi.png"
               alt="Logo"
               className="w-8 h-8 object-contain rounded"
             />
