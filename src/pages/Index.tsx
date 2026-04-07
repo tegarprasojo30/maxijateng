@@ -41,11 +41,12 @@ export default function Index() {
   }, [companies]);
 
   const skalaOptions = useMemo(() => {
-    const set = new Set<string>();
+    const order = ["KECIL", "MENENGAH", "BESAR", "Non SF"];
+    const available = new Set<string>();
     companies.forEach(c => {
-      if (c.skalaUsaha) set.add(c.skalaUsaha);
+      if (c.skalaUsaha) available.add(c.skalaUsaha);
     });
-    return Array.from(set).sort();
+    return order.filter(o => available.has(o));
   }, [companies]);
 
   // Count projects per company per period (placeholder logic - adjust based on actual data)
