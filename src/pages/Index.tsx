@@ -162,17 +162,17 @@ export default function Index() {
         ) : (
           <div className="rounded-xl border bg-card shadow-sm overflow-auto max-h-[calc(100vh-280px)]">
             <Table>
-              <TableHeader className="sticky top-0 z-10 bg-card shadow-sm">
-                <TableRow className="bg-muted/50">
-                  <TableHead rowSpan={2} className="font-semibold w-12 align-middle border-r">#</TableHead>
-                  <TableHead rowSpan={2} className="font-semibold align-middle border-r">Kabupaten/Kota</TableHead>
-                  <TableHead rowSpan={2} className="font-semibold align-middle border-r">Nama Penyedia</TableHead>
-                  <TableHead rowSpan={2} className="font-semibold align-middle border-r">Alamat</TableHead>
-                  <TableHead rowSpan={2} className="font-semibold align-middle border-r">Skala Usaha</TableHead>
-                  <TableHead colSpan={5} className="font-semibold text-center border-r">Jumlah Proyek</TableHead>
-                  <TableHead rowSpan={2} className="font-semibold text-center align-middle">Aksi</TableHead>
+              <TableHeader className="sticky top-0 z-10">
+                <TableRow className="bg-muted">
+                  <TableHead rowSpan={2} className="font-semibold w-12 align-middle border-r bg-muted">#</TableHead>
+                  <TableHead rowSpan={2} className="font-semibold align-middle border-r bg-muted">Kabupaten/Kota</TableHead>
+                  <TableHead rowSpan={2} className="font-semibold align-middle border-r bg-muted">Nama Penyedia</TableHead>
+                  <TableHead rowSpan={2} className="font-semibold align-middle border-r bg-muted">Alamat</TableHead>
+                  <TableHead rowSpan={2} className="font-semibold align-middle border-r bg-muted">Skala Usaha</TableHead>
+                  <TableHead colSpan={5} className="font-semibold text-center border-r bg-muted">Jumlah Proyek</TableHead>
+                  <TableHead rowSpan={2} className="font-semibold text-center align-middle bg-muted">Aksi</TableHead>
                 </TableRow>
-                <TableRow className="bg-muted/30">
+                <TableRow className="bg-muted/80">
                   <TableHead className="font-medium text-center text-xs border-r">2025</TableHead>
                   <TableHead className="font-medium text-center text-xs border-r">2026 Tw I</TableHead>
                   <TableHead className="font-medium text-center text-xs border-r">2026 Tw II</TableHead>
