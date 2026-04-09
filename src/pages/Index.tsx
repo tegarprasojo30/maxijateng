@@ -169,27 +169,24 @@ export default function Index() {
                   <TableHead rowSpan={2} className="font-semibold align-middle border-r bg-muted">Nama Penyedia</TableHead>
                   <TableHead rowSpan={2} className="font-semibold align-middle border-r bg-muted">Alamat</TableHead>
                   <TableHead rowSpan={2} className="font-semibold align-middle border-r bg-muted">Skala Usaha</TableHead>
-                  <TableHead colSpan={5} className="font-semibold text-center border-r bg-muted">Jumlah Proyek</TableHead>
+                  <TableHead colSpan={2} className="font-semibold text-center border-r bg-muted">Jumlah Proyek</TableHead>
+                  <TableHead rowSpan={2} className="font-semibold align-middle border-r bg-muted">Total Nilai Proyek 2025</TableHead>
                   <TableHead rowSpan={2} className="font-semibold text-center align-middle bg-muted">Aksi</TableHead>
                 </TableRow>
                 <TableRow className="bg-muted/80">
-                  <TableHead className="font-medium text-center text-xs border-r">2025</TableHead>
-                  <TableHead className="font-medium text-center text-xs border-r">2026 Tw I</TableHead>
-                  <TableHead className="font-medium text-center text-xs border-r">2026 Tw II</TableHead>
-                  <TableHead className="font-medium text-center text-xs border-r">2026 Tw III</TableHead>
-                  <TableHead className="font-medium text-center text-xs border-r">2026 Tw IV</TableHead>
+                  <TableHead className="font-medium text-center text-xs border-r bg-muted">2025</TableHead>
+                  <TableHead className="font-medium text-center text-xs border-r bg-muted">2026 Tw I</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {paged.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={11} className="text-center py-12 text-muted-foreground">
+                    <TableCell colSpan={9} className="text-center py-12 text-muted-foreground">
                       Tidak ada data ditemukan.
                     </TableCell>
                   </TableRow>
                 ) : (
                   paged.map((c, i) => {
-                    const counts = projectCounts.get(c.kodePenyedia) || { y2025: 0, tw1: 0, tw2: 0, tw3: 0, tw4: 0 };
                     return (
                       <TableRow key={c.kodePenyedia + i} className="table-row-hover">
                         <TableCell className="text-muted-foreground text-xs border-r">
@@ -199,11 +196,9 @@ export default function Index() {
                         <TableCell className="text-sm font-medium border-r">{c.namaPenyedia}</TableCell>
                         <TableCell className="text-sm border-r">{c.alamat}</TableCell>
                         <TableCell className="text-sm border-r">{c.skalaUsaha}</TableCell>
-                        <TableCell className="text-sm text-center border-r">{counts.y2025 || '-'}</TableCell>
-                        <TableCell className="text-sm text-center border-r">{counts.tw1 || '-'}</TableCell>
-                        <TableCell className="text-sm text-center border-r">{counts.tw2 || '-'}</TableCell>
-                        <TableCell className="text-sm text-center border-r">{counts.tw3 || '-'}</TableCell>
-                        <TableCell className="text-sm text-center border-r">{counts.tw4 || '-'}</TableCell>
+                        <TableCell className="text-sm text-center border-r">{c.jumlahProyek2025 || '-'}</TableCell>
+                        <TableCell className="text-sm text-center border-r">{c.jumlahProyekTw1 || '-'}</TableCell>
+                        <TableCell className="text-sm text-right border-r">{c.totalNilaiProyek2025 || '-'}</TableCell>
                         <TableCell>
                           <div className="flex items-center justify-center gap-2">
                             <Button
