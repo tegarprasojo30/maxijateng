@@ -51,7 +51,10 @@ export interface Perusahaan {
   fax: string;
   website: string;
   nomorPKP: string;
+  jumlahProyek2025: string;
+  jumlahProyekTw1: string;
   skalaUsaha: string;
+  totalNilaiProyek2025: string;
 }
 
 export interface Proyek {
@@ -92,6 +95,42 @@ export interface ProgressSKTH {
   progres: string;
 }
 
+export interface ProgressNotes {
+  note1: string;
+  note2: string;
+}
+
+export interface DashboardData {
+  skthTitle: string;
+  skthTargetSampel: string;
+  skthSelesai: string;
+  skthProgres: string;
+  skthFraction: string;
+  skthBesar: string;
+  skthMenengah: string;
+  skthKecil: string;
+  sktrTitle: string;
+  sktrTriwulan: string;
+  sktrTargetSampel: string;
+  sktrSelesai: string;
+  sktrProgres: string;
+  sktrFraction: string;
+  sktrBesar: string;
+  sktrMenengah: string;
+  sktrKecil: string;
+}
+
+export interface GrafikData {
+  targetSampel: number;
+  open: number;
+  submittedByPencacah: number;
+  approvedByPengawas: number;
+  rejectedByPengawas: number;
+  completedByAdmin: number;
+  pieSelesai: number;
+  pieBelum: number;
+}
+
 export async function fetchPerusahaan(): Promise<Perusahaan[]> {
   const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=PERUSAHAAN`;
   const res = await fetch(url);
@@ -113,7 +152,10 @@ export async function fetchPerusahaan(): Promise<Perusahaan[]> {
     fax: r[12] || '',
     website: r[13] || '',
     nomorPKP: r[14] || '',
+    jumlahProyek2025: r[15] || '0',
+    jumlahProyekTw1: r[16] || '0',
     skalaUsaha: r[20] || '',
+    totalNilaiProyek2025: r[21] || '',
   }));
 }
 
@@ -150,12 +192,12 @@ export async function fetchProyek(): Promise<Proyek[]> {
   }));
 }
 
-export async function fetchProgressSKTH(): Promise<ProgressSKTH[]> {
-  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=PROGRESSKTH`;
-  const res = await fetch(url);
-  const csv = await res.text();
-  const rows = parseCSV(csv);
-  return rows.slice(1).map(r => ({
+function parseProgressRows(rows: string[][]): { data: ProgressSKTH[]; notes: ProgressNotes } {
+  const notes: ProgressNotes = {
+    note1: rows[0]?.[9] || '',
+    note2: rows[1]?.[9] || '',
+  };
+  const data = rows.slice(1).map(r => ({
     kabupatenKota: r[0] || '',
     targetSampel: parseInt(r[1] || '0', 10),
     open: parseInt(r[2] || '0', 10),
@@ -165,4 +207,76 @@ export async function fetchProgressSKTH(): Promise<ProgressSKTH[]> {
     completedByAdmin: parseInt(r[6] || '0', 10),
     progres: r[7] || '0%',
   }));
+  return { data, notes };
+}
+
+export async function fetchProgressSKTH(): Promise<{ data: ProgressSKTH[]; notes: ProgressNotes }> {
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=PROGRESSKTH`;
+  const res = await fetch(url);
+  const csv = await res.text();
+  const rows = parseCSV(csv);
+  return parseProgressRows(rows);
+}
+
+export async function fetchProgressKTR1(): Promise<{ data: ProgressSKTH[]; notes: ProgressNotes }> {
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=PROGRESSKTR1`;
+  const res = await fetch(url);
+  const csv = await res.text();
+  const rows = parseCSV(csv);
+  return parseProgressRows(rows);
+}
+
+export async function fetchDashboard(): Promise<DashboardData> {
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=DASHBOARD`;
+  const res = await fetch(url);
+  const csv = await res.text();
+  const rows = parseCSV(csv);
+  return {
+    skthTitle: rows[0]?.[0] || '',
+    skthTargetSampel: rows[1]?.[14] || '0',
+    skthSelesai: rows[3]?.[14] || '0%',
+    skthProgres: rows[3]?.[14] || '0%',
+    skthFraction: rows[3]?.[6] || '',
+    skthBesar: rows[4]?.[14] || '0',
+    skthMenengah: rows[5]?.[14] || '0',
+    skthKecil: rows[6]?.[14] || '0',
+    sktrTitle: rows[9]?.[0] || '',
+    sktrTriwulan: rows[9]?.[11] || '',
+    sktrTargetSampel: rows[11]?.[14] || '0',
+    sktrSelesai: rows[13]?.[14] || '0%',
+    sktrProgres: rows[13]?.[14] || '0%',
+    sktrFraction: rows[13]?.[6] || '',
+    sktrBesar: rows[14]?.[14] || '0',
+    sktrMenengah: rows[15]?.[14] || '0',
+    sktrKecil: rows[16]?.[14] || '0',
+  };
+}
+
+function parseGrafikRows(rows: string[][]): GrafikData {
+  return {
+    targetSampel: parseInt(rows[1]?.[16] || '0', 10),
+    open: parseInt(rows[1]?.[17] || '0', 10),
+    submittedByPencacah: parseInt(rows[1]?.[18] || '0', 10),
+    approvedByPengawas: parseInt(rows[1]?.[19] || '0', 10),
+    rejectedByPengawas: parseInt(rows[1]?.[20] || '0', 10),
+    completedByAdmin: parseInt(rows[1]?.[21] || '0', 10),
+    pieSelesai: parseInt(rows[5]?.[1] || '0', 10),
+    pieBelum: parseInt(rows[6]?.[1] || '0', 10),
+  };
+}
+
+export async function fetchGrafikSKTH(): Promise<GrafikData> {
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=GRAFIKSKTH`;
+  const res = await fetch(url);
+  const csv = await res.text();
+  const rows = parseCSV(csv);
+  return parseGrafikRows(rows);
+}
+
+export async function fetchGrafikSKTR1(): Promise<GrafikData> {
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=GRAFIKSKTR1`;
+  const res = await fetch(url);
+  const csv = await res.text();
+  const rows = parseCSV(csv);
+  return parseGrafikRows(rows);
 }
