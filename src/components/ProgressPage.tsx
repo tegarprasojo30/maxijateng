@@ -34,27 +34,6 @@ export default function ProgressPage({
   const progressData = progressResult?.data || [];
   const notes = progressResult?.notes;
 
-const totalRow = useMemo(() => {
-    return progressData.find(r => r.kabupatenKota.toUpperCase().includes("JAWA TENGAH"));
-  }, [progressData]);
-
-  const progresss = useMemo(() => {
-    if (!totalRow) return 0;
-    const completed = Number(totalRow.completedByAdmin);
-    const target = Number(totalRow.targetSampel);
-    if (!target) return 0;
-    return (completed / target) * 100;
-  }, [totalRow]);
-
-  const pieData = useMemo(() => {
-    const selesai = Number(progresss.toFixed(2));
-    const belum = Number((100 - progresss).toFixed(2));
-    return [
-      { name: "Selesai", value: selesai },
-      { name: "Belum", value: belum }
-    ];
-  }, [progresss]);
-
   const parseProgress = (val: string) => {
     const num = parseFloat(val.replace(',', '.').replace('%', ''));
     return isNaN(num) ? 0 : num;
@@ -169,10 +148,10 @@ function GrafikTiles({ data }: { data: GrafikData }) {
   //{ name: 'Selesai', value: parseFloat(data.pieSelesai.toFixed(2)) },
   //{ name: 'Belum', value: parseFloat(data.pieBelum.toFixed(2)) },
 //];
-  //const pieData = [
-    //{ name: 'Selesai', value: data.pieSelesai },
-    //{ name: 'Belum', value: data.pieBelum },
-  //];
+  const pieData = [
+    { name: 'Selesai', value: data.pieSelesai },
+    { name: 'Belum', value: data.pieBelum },
+  ];
 
   const PIE_COLORS = ['hsl(var(--primary))', 'hsl(var(--muted-foreground) / 0.3)'];
 
