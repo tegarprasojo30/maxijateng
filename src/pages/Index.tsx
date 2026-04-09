@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPerusahaan, fetchProyek, type Perusahaan } from "@/lib/sheets";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input";
 import CompanyDetailDialog from "@/components/CompanyDetailDialog";
 import ProjectListDialog from "@/components/ProjectListDialog";
 import { Eye, FolderOpen, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Search, Loader2, HardHat } from "lucide-react";
-import { useEffect } from "react";
 
 const PAGE_SIZE = 15;
 
@@ -49,21 +48,6 @@ export default function Index() {
     return order.filter(o => available.has(o));
   }, [companies]);
 
-  // Count projects per company per period (placeholder logic - adjust based on actual data)
-  const projectCounts = useMemo(() => {
-    const counts = new Map<string, { y2025: number; tw1: number; tw2: number; tw3: number; tw4: number }>();
-    allProjects.forEach(p => {
-      const key = p.kodePenyedia;
-      if (!counts.has(key)) {
-        counts.set(key, { y2025: 0, tw1: 0, tw2: 0, tw3: 0, tw4: 0 });
-      }
-      const c = counts.get(key)!;
-      // Simple classification based on status or date - count all as 2025 for now
-      // You can refine this logic based on actual date/period columns
-      c.y2025++;
-    });
-    return counts;
-  }, [allProjects]);
 
   const filtered = useMemo(() => {
     let result = companies;
