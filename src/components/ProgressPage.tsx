@@ -149,8 +149,10 @@ function GrafikTiles({ data }: { data: GrafikData }) {
   //{ name: 'Belum', value: parseFloat(data.pieBelum.toFixed(2)) },
 //];
   const pieData = [
-    { name: 'Selesai', value: data.pieSelesai },
-    { name: 'Belum', value: data.pieBelum },
+    //const grafselesai = data.completedByAdmin / data.open;
+    //const grafbelum = 1 - grafselesai.value;
+    { name: 'Selesai', value: data.completedByAdmin / data.open },
+    { name: 'Belum', value: 1 - (data.completedByAdmin / data.open) },
   ];
 
   const PIE_COLORS = ['hsl(var(--primary))', 'hsl(var(--muted-foreground) / 0.3)'];
