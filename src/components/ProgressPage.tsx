@@ -199,7 +199,7 @@ function GrafikTiles({ data }: { data: GrafikData }) {
                     <Cell key={index} fill={PIE_COLORS[index]} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value: number) => `${(percent * 100).toFixed(2)}%`}/>
+                <Tooltip formatter={(percent: number) => `${(percent * 100).toFixed(2)}%`}/>
                 <Legend />
               </PieChart>
             </ResponsiveContainer>
