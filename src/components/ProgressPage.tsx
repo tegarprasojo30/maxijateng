@@ -151,8 +151,8 @@ function GrafikTiles({ data }: { data: GrafikData }) {
   const pieData = [
     //const grafselesai = data.completedByAdmin / data.open;
     //const grafbelum = 1 - grafselesai.value;
-    { name: 'Selesai', value: data.completedByAdmin / data.open },
-    { name: 'Belum', value: 1 - (data.completedByAdmin / data.open) },
+    { name: 'Selesai', value: data.completedByAdmin / data.targetSampel },
+    { name: 'Belum', value: 1 - (data.completedByAdmin / data.targetSampel) },
   ];
 
   const PIE_COLORS = ['hsl(var(--primary))', 'hsl(var(--muted-foreground) / 0.3)'];
