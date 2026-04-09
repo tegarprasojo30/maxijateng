@@ -260,8 +260,10 @@ function parseGrafikRows(rows: string[][]): GrafikData {
     approvedByPengawas: parseInt(rows[1]?.[19] || '0', 10),
     rejectedByPengawas: parseInt(rows[1]?.[20] || '0', 10),
     completedByAdmin: parseInt(rows[1]?.[21] || '0', 10),
-    pieSelesai: parseInt(rows[5]?.[1] || '0', 10),
-    pieBelum: parseInt(rows[6]?.[1] || '0', 10),
+    //pieSelesai: parseInt(rows[5]?.[1] || '0', 10),
+    //pieBelum: parseInt(rows[6]?.[1] || '0', 10),
+    pieSelesai: Number(parseFloat(rows[5]?.[1] || '0').toFixed(2)),
+    pieBelum: Number(parseFloat(rows[6]?.[1] || '0').toFixed(2)),
   };
 }
 
