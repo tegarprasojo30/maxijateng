@@ -186,7 +186,7 @@ function GrafikTiles({ data }: { data: GrafikData }) {
                   dataKey="value"
                   endAngle={animatedAngle}
                   startAngle={0}
-                  label={({ name, value }) => `${name}: ${value}`}
+                  label={({ name, value }) => `${name}: ${value.toFixed(2)}%`}
                 >
                   {pieData.map((_, index) => (
                     <Cell key={index} fill={PIE_COLORS[index]} />
