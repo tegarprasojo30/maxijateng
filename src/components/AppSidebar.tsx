@@ -25,7 +25,7 @@ const skthSubMenus = [
 ];
 
 const sktrSubMenus = [
-  { title: "Progres", icon: TrendingUp, suffix: "/progres" },
+  { title: "Progres", icon: TrendingUp, path: "/sktr-2026/progres" },
   { title: "Daftar Sampel", icon: List, suffix: "/daftar-sampel" },
   { title: "Ganti Sampel", icon: RefreshCw, suffix: "/ganti-sampel" },
   { title: "Anomali Data", icon: AlertTriangle, suffix: "/anomali-data" },
@@ -71,17 +71,17 @@ export function AppSidebar() {
               {/* Dashboard */}
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href="#" onClick={handleComingSoon} className="flex items-center">
+                  <NavLink to="/" end activeClassName="bg-sidebar-accent text-sidebar-primary font-semibold">
                     <LayoutDashboard className="h-4 w-4 mr-2" />
                     {!collapsed && <span>Dashboard</span>}
-                  </a>
+                  </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
               {/* Data LPSE */}
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to="/" end activeClassName="bg-sidebar-accent text-sidebar-primary font-semibold">
+                  <NavLink to="/data-lpse" activeClassName="bg-sidebar-accent text-sidebar-primary font-semibold">
                     <Database className="h-4 w-4 mr-2" />
                     {!collapsed && <span>Data LPSE</span>}
                   </NavLink>
@@ -141,10 +141,17 @@ export function AppSidebar() {
                       {sktrSubMenus.map(item => (
                         <SidebarMenuSubItem key={item.title}>
                           <SidebarMenuSubButton asChild>
-                            <a href="#" onClick={handleComingSoon} className="flex items-center">
-                              <item.icon className="h-3.5 w-3.5 mr-2" />
-                              <span>{item.title}</span>
-                            </a>
+                            {item.path ? (
+                              <NavLink to={item.path} activeClassName="bg-sidebar-accent text-sidebar-primary font-semibold">
+                                <item.icon className="h-3.5 w-3.5 mr-2" />
+                                <span>{item.title}</span>
+                              </NavLink>
+                            ) : (
+                              <a href="#" onClick={handleComingSoon} className="flex items-center">
+                                <item.icon className="h-3.5 w-3.5 mr-2" />
+                                <span>{item.title}</span>
+                              </a>
+                            )}
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                       ))}

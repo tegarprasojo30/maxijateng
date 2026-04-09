@@ -5,8 +5,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
-import Index from "./pages/Index.tsx";
+import Dashboard from "./pages/Dashboard.tsx";
+import DataLPSE from "./pages/Index.tsx";
 import ProgressSKTH from "./pages/ProgressSKTH.tsx";
+import ProgressSKTR from "./pages/ProgressSKTR.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -33,8 +35,10 @@ const App = () => (
       <BrowserRouter>
         <AppLayout>
           <Routes>
-            <Route path="/" element={<Index />} />
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/data-lpse" element={<DataLPSE />} />
             <Route path="/skth-2025/progres" element={<ProgressSKTH />} />
+            <Route path="/sktr-2026/progres" element={<ProgressSKTR />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AppLayout>
