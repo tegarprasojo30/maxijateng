@@ -84,93 +84,105 @@ export default function ProgressPage({
 
       <main className="max-w-full mx-auto px-4 py-6 space-y-6">
 
-        {/* ✅ TILES TETAP ADA */}
-        {grafikData && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-            {TILE_CONFIG.map(tile => {
-              const Icon = tile.icon;
-              return (
-                <Card key={tile.key} className={`border-l-4 ${tile.colorClass}`}>
-                  <CardContent className="pt-4 pb-3">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Icon className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-xs text-muted-foreground truncate">{tile.label}</span>
-                    </div>
-                    <p className="text-2xl font-bold">{grafikData[tile.key]}</p>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        )}
+        {/* 🔥 LAYOUT BARU: PIE KIRI, TILES KANAN */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
 
-        {/* ✅ PIE FIX */}
+          {/* PIE CHART - KIRI */}
+          <Card className="lg:col-span-1 h-full">
+            <CardContent className="pt-5 pb-4 h-full flex flex-col">
+              <h3 className="text-sm font-semibold text-muted-foreground mb-3">Status Pengumpulan</h3>
+              <div className="flex-1 min-h-[260px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={pieData}
+                      dataKey="value"
+                      nameKey="name"
+                      innerRadius={60}
+                      outerRadius={90}
+                      label={({ name, value }) => `${name}: ${value.toFixed(2)}%`}
+                    >
+                      {pieData.map((_, index) => (
+                        <Cell key={index} fill={PIE_COLORS[index]} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(value: number) => `${value.toFixed(2)}%`} />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* TILES - KANAN (3x2) */}
+          {grafikData && (
+            <div className="lg:col-span-2 grid grid-cols-2 md:grid-cols-3 gap-3">
+              {TILE_CONFIG.map(tile => {
+                const Icon = tile.icon;
+                return (
+                  <Card key={tile.key} className={`border-l-4 ${tile.colorClass} h-full`}>
+                    <CardContent className="pt-4 pb-3 h-full flex flex-col justify-center">
+                      <div className="flex items-center gap-2 mb-1">
+                        <Icon className="h-4 w-4 text-muted-foreground" />
+                        <span className="text-xs text-muted-foreground truncate">{tile.label}</span>
+                      </div>
+                      <p className="text-2xl font-bold">{grafikData[tile.key]}</p>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* TABLE */}
         <Card>
           <CardContent className="pt-5 pb-4">
-            <h3 className="text-sm font-semibold text-muted-foreground mb-3">Status Pengumpulan</h3>
-            <div className="h-[250px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={pieData}
-                    dataKey="value"
-                    nameKey="name"
-                    innerRadius={60}
-                    outerRadius={90}
-                    label={({ name, value }) => `${name}: ${value.toFixed(2)}%`}
-                  >
-                    {pieData.map((_, index) => (
-                      <Cell key={index} fill={PIE_COLORS[index]} />
-                    ))}
-                  </Pie>
-                  <Tooltip formatter={(value: number) => `${value.toFixed(2)}%`} />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
+            <h3 className="text-sm font-semibold text-muted-foreground mb-3">Detail Progress Kabupaten/Kota</h3>
+
+            <div className="overflow-auto">
+              <table className="w-full text-sm border">
+                <thead className="bg-muted">
+                  <tr>
+                    <th className="p-2 text-left">Kabupaten/Kota</th>
+                    <th className="p-2 text-right">Target Sampel</th>
+                    <th className="p-2 text-right">Open</th>
+                    <th className="p-2 text-right">Submitted by Pencacah</th>
+                    <th className="p-2 text-right">Approved by Pengawas</th>
+                    <th className="p-2 text-right">Rejected by Pengawas</th>
+                    <th className="p-2 text-right">Completed by Admin Kab/Kota</th>
+                    <th className="p-2 text-right">Progres</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {progressData.map((row, index) => {
+                    const progress = row.target
+                      ? (row.completed / row.target) * 100
+                      : 0;
+
+                    return (
+                      <tr key={index} className="border-t hover:bg-muted/50">
+                        <td className="p-2">{row.kabupaten}</td>
+                        <td className="p-2 text-right">{row.target}</td>
+                        <td className="p-2 text-right">{row.open}</td>
+                        <td className="p-2 text-right">{row.submitted}</td>
+                        <td className="p-2 text-right">{row.approved}</td>
+                        <td className="p-2 text-right">{row.rejected}</td>
+                        <td className="p-2 text-right font-semibold">{row.completed}</td>
+                        <td className="p-2 text-right font-semibold">
+                          {progress.toFixed(2)}%
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
           </CardContent>
         </Card>
+      </div>
+    );
+  };
 
-        {/* TABLE */}
-        {isLoading ? (
-          <div className="flex items-center justify-center py-20">
-            <Loader2 className="h-8 w-8 animate-spin" />
-          </div>
-        ) : (
-          <div className="rounded-xl border bg-card shadow-sm overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>#</TableHead>
-                  <TableHead>Kabupaten/Kota</TableHead>
-                  <TableHead className="text-center">Target</TableHead>
-                  <TableHead className="text-center">Completed</TableHead>
-                  <TableHead className="text-center">Progres</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {progressData.map((row, i) => {
-                  const pVal = parseProgress(row.progres);
-                  return (
-                    <TableRow key={i}>
-                      <TableCell>{i + 1}</TableCell>
-                      <TableCell>{row.kabupatenKota}</TableCell>
-                      <TableCell className="text-center">{row.targetSampel}</TableCell>
-                      <TableCell className="text-center">{row.completedByAdmin}</TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Progress value={pVal} className="h-2 flex-1" />
-                          <span className="text-xs w-12 text-right">{row.progres}</span>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </div>
-        )}
-      </main>
-    </div>
-  );
-}
+  export default ProgressPage;
