@@ -144,14 +144,14 @@ function GrafikTiles({ data }: { data: GrafikData }) {
     requestAnimationFrame(animate);
   }, []);
 
-  const pieData = [
-  { name: 'Selesai', value: parseFloat(data.pieSelesai.toFixed(2)) },
-  { name: 'Belum', value: parseFloat(data.pieBelum.toFixed(2)) },
-];
   //const pieData = [
-    //{ name: 'Selesai', value: data.pieSelesai },
-    //{ name: 'Belum', value: data.pieBelum },
-  //];
+  //{ name: 'Selesai', value: parseFloat(data.pieSelesai.toFixed(2)) },
+  //{ name: 'Belum', value: parseFloat(data.pieBelum.toFixed(2)) },
+//];
+  const pieData = [
+    { name: 'Selesai', value: data.completedByAdmin },
+    { name: 'Belum', value: data.open-data.completedByAdmin },
+  ];
 
   const PIE_COLORS = ['hsl(var(--primary))', 'hsl(var(--muted-foreground) / 0.3)'];
 
