@@ -3,9 +3,10 @@ import { type ProgressSKTH, type ProgressNotes, type GrafikData } from "@/lib/sh
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent } from "@/components/ui/card";
-import { Loader2, TrendingUp, Target, FolderOpen, CheckCircle, XCircle, ShieldCheck } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Loader2, TrendingUp, Target, FolderOpen, CheckCircle, XCircle, ShieldCheck, FileDown, FileText } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 
 interface ProgressPageProps {
   title: string;
@@ -39,6 +40,28 @@ export default function ProgressPage({
     return isNaN(num) ? 0 : num;
   };
 
+  const handleDownloadXlsx = () => {
+    if (!progressData.length) return;
+    const headers = ["No", "Kabupaten/Kota", "Target Sampel", "Open", "Submitted by Pencacah", "Approved by Pengawas", "Rejected by Pengawas", "Completed by Admin", "Progres"];
+    const csvRows = [headers.join("\t")];
+    progressData.forEach((row, i) => {
+      const isTotal = row.kabupatenKota.toUpperCase().includes('JAWA TENGAH');
+      csvRows.push([isTotal ? '' : (i + 1), row.kabupatenKota, row.targetSampel, row.open, row.submittedByPencacah, row.approvedByPengawas, row.rejectedByPengawas, row.completedByAdmin, row.progres].join("\t"));
+    });
+    const bom = '\uFEFF';
+    const blob = new Blob([bom + csvRows.join("\n")], { type: "application/vnd.ms-excel;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${title.replace(/\s+/g, '_')}.xls`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleDownloadPdf = () => {
+    window.print();
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <header className="construction-header py-6 px-4 sticky top-0 z-20">
@@ -52,6 +75,18 @@ export default function ProgressPage({
       </header>
 
       <main className="max-w-full mx-auto px-4 py-6 space-y-6">
+        {/* Download buttons */}
+        <div className="flex gap-2 justify-end">
+          <Button variant="outline" size="sm" onClick={handleDownloadXlsx} disabled={!progressData.length}>
+            <FileDown className="h-4 w-4 mr-1.5" />
+            Unduh .xlsx
+          </Button>
+          <Button variant="outline" size="sm" onClick={handleDownloadPdf}>
+            <FileText className="h-4 w-4 mr-1.5" />
+            Unduh .pdf
+          </Button>
+        </div>
+
         {/* Grafik Tiles */}
         {grafikData && <GrafikTiles data={grafikData} />}
 
@@ -105,7 +140,6 @@ export default function ProgressPage({
               </Table>
             </div>
 
-            {/* Notes */}
             {notes && (notes.note1 || notes.note2) && (
               <div className="text-sm text-muted-foreground space-y-1 px-1">
                 {notes.note1 && <p className="font-medium">{notes.note1}</p>}
@@ -144,13 +178,7 @@ function GrafikTiles({ data }: { data: GrafikData }) {
     requestAnimationFrame(animate);
   }, []);
 
-  //const pieData = [
-  //{ name: 'Selesai', value: parseFloat(data.pieSelesai.toFixed(2)) },
-  //{ name: 'Belum', value: parseFloat(data.pieBelum.toFixed(2)) },
-//];
   const pieData = [
-    //const grafselesai = data.completedByAdmin / data.open;
-    //const grafbelum = 1 - grafselesai.value;
     { name: 'Selesai', value: data.completedByAdmin / data.targetSampel },
     { name: 'Belum', value: 1 - (data.completedByAdmin / data.targetSampel) },
   ];
@@ -176,7 +204,6 @@ function GrafikTiles({ data }: { data: GrafikData }) {
         })}
       </div>
 
-      {/* Pie Chart */}
       <Card>
         <CardContent className="pt-5 pb-4">
           <h3 className="text-sm font-semibold text-muted-foreground mb-3">Status Pengumpulan</h3>
@@ -193,13 +220,12 @@ function GrafikTiles({ data }: { data: GrafikData }) {
                   endAngle={animatedAngle}
                   startAngle={0}
                   label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(2)}%`}
-                  //label={({ name, value }) => `${name}: ${value.toFixed(2)}%`}
                 >
                   {pieData.map((_, index) => (
                     <Cell key={index} fill={PIE_COLORS[index]} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(percent: number) => `${(percent * 100).toFixed(2)}%`}/>
+                <Tooltip formatter={(percent: number) => `${(percent * 100).toFixed(2)}%`} />
                 <Legend />
               </PieChart>
             </ResponsiveContainer>

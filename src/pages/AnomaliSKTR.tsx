@@ -51,9 +51,9 @@ export default function AnomaliSKTR() {
     if (search.trim()) {
       const q = search.toLowerCase();
       r = r.filter(d =>
-        d.namaPenyedia.toLowerCase().includes(q) ||
-        d.kodePenyedia.toLowerCase().includes(q) ||
-        d.keterangan.toLowerCase().includes(q)
+        d.namaPerusahaan.toLowerCase().includes(q) ||
+        d.namaProyek.toLowerCase().includes(q) ||
+        d.catatan.toLowerCase().includes(q)
       );
     }
     return r;
@@ -82,7 +82,7 @@ export default function AnomaliSKTR() {
         <div className="flex flex-col sm:flex-row gap-3 flex-wrap">
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input placeholder="Cari nama/kode penyedia..." value={search} onChange={e => setSearch(e.target.value)} className="pl-10" />
+            <Input placeholder="Cari nama perusahaan/proyek..." value={search} onChange={e => setSearch(e.target.value)} className="pl-10" />
           </div>
           <div className="w-56">
             <Select value={kabFilter} onValueChange={setKabFilter}>
@@ -126,28 +126,30 @@ export default function AnomaliSKTR() {
                   <TableRow className="bg-muted">
                     <TableHead className="font-semibold w-12 border-r bg-muted">#</TableHead>
                     <TableHead className="font-semibold border-r bg-muted">Kabupaten/Kota</TableHead>
-                    <TableHead className="font-semibold border-r bg-muted">Kode Penyedia</TableHead>
-                    <TableHead className="font-semibold border-r bg-muted">Nama Penyedia</TableHead>
                     <TableHead className="font-semibold border-r bg-muted">Triwulan</TableHead>
+                    <TableHead className="font-semibold border-r bg-muted">Nama Perusahaan</TableHead>
+                    <TableHead className="font-semibold border-r bg-muted">Skala Usaha</TableHead>
+                    <TableHead className="font-semibold border-r bg-muted">Nama Proyek</TableHead>
                     <TableHead className="font-semibold border-r bg-muted">Jenis Anomali</TableHead>
-                    <TableHead className="font-semibold bg-muted">Keterangan</TableHead>
+                    <TableHead className="font-semibold bg-muted">Catatan</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {paged.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={7} className="text-center py-12 text-muted-foreground">Tidak ada data ditemukan.</TableCell>
+                      <TableCell colSpan={8} className="text-center py-12 text-muted-foreground">Tidak ada data ditemukan.</TableCell>
                     </TableRow>
                   ) : (
                     paged.map((d, i) => (
                       <TableRow key={i} className="table-row-hover">
                         <TableCell className="text-muted-foreground text-xs border-r">{(page - 1) * PAGE_SIZE + i + 1}</TableCell>
                         <TableCell className="text-sm border-r">{d.kabupatenKota}</TableCell>
-                        <TableCell className="text-sm border-r">{d.kodePenyedia}</TableCell>
-                        <TableCell className="text-sm font-medium border-r">{d.namaPenyedia}</TableCell>
                         <TableCell className="text-sm border-r">{d.triwulan}</TableCell>
+                        <TableCell className="text-sm font-medium border-r">{d.namaPerusahaan}</TableCell>
+                        <TableCell className="text-sm border-r">{d.skalaUsaha}</TableCell>
+                        <TableCell className="text-sm border-r">{d.namaProyek}</TableCell>
                         <TableCell className="text-sm border-r">{d.jenisAnomali}</TableCell>
-                        <TableCell className="text-sm">{d.keterangan}</TableCell>
+                        <TableCell className="text-sm">{d.catatan}</TableCell>
                       </TableRow>
                     ))
                   )}
@@ -168,9 +170,10 @@ export default function AnomaliSKTR() {
               </div>
             </div>
 
-            {notes?.note && (
+            {notes && (notes.note1 || notes.note2) && (
               <div className="text-sm text-muted-foreground space-y-1 px-1">
-                <p className="font-medium">{notes.note}</p>
+                {notes.note1 && <p className="font-medium">{notes.note1}</p>}
+                {notes.note2 && <p className="italic">{notes.note2}</p>}
               </div>
             )}
           </>
