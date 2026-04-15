@@ -28,7 +28,7 @@ const sktrSubMenus = [
   { title: "Progres", icon: TrendingUp, path: "/sktr-2026/progres" },
   { title: "Daftar Sampel", icon: List, suffix: "/daftar-sampel" },
   { title: "Ganti Sampel", icon: RefreshCw, suffix: "/ganti-sampel" },
-  { title: "Anomali Data", icon: AlertTriangle, suffix: "/anomali-data" },
+  { title: "Anomali Data", icon: AlertTriangle, path: "/sktr-2026/anomali-data" },
 ];
 
 function handleComingSoon(e: React.MouseEvent) {

@@ -83,7 +83,7 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="construction-header py-6 px-4">
+      <header className="construction-header py-6 px-4 sticky top-0 z-20">
         <div className="max-w-full mx-auto">
           <div className="flex items-center gap-3 mb-1">
             <HardHat className="h-7 w-7" />
@@ -215,7 +215,7 @@ export default function Index() {
             {/* Pagination */}
             <div className="flex items-center justify-between px-4 py-3 border-t bg-muted/30">
               <p className="text-sm text-muted-foreground">
-                Menampilkan {Math.min((page - 1) * PAGE_SIZE + 1, filtered.length)}–{Math.min(page * PAGE_SIZE, filtered.length)} dari {filtered.length} perusahaan
+                Menampilkan {Math.min((page - 1) * PAGE_SIZE + 1, filtered.length).toLocaleString('id-ID')}–{Math.min(page * PAGE_SIZE, filtered.length).toLocaleString('id-ID')} dari {filtered.length.toLocaleString('id-ID')} perusahaan
               </p>
               <div className="flex items-center gap-1">
                 <Button variant="outline" size="sm" onClick={() => setPage(1)} disabled={page === 1}>

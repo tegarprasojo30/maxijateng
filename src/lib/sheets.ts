@@ -282,3 +282,35 @@ export async function fetchGrafikSKTR1(): Promise<GrafikData> {
   const rows = parseCSV(csv);
   return parseGrafikRows(rows);
 }
+
+export interface AnomaliSKTR {
+  kabupatenKota: string;
+  kodePenyedia: string;
+  namaPenyedia: string;
+  triwulan: string;
+  jenisAnomali: string;
+  keterangan: string;
+}
+
+export interface AnomaliNotes {
+  note: string;
+}
+
+export async function fetchAnomaliSKTR(): Promise<{ data: AnomaliSKTR[]; notes: AnomaliNotes }> {
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=ANOMALISKTR`;
+  const res = await fetch(url);
+  const csv = await res.text();
+  const rows = parseCSV(csv);
+  const notes: AnomaliNotes = {
+    note: rows[0]?.[10] || '',
+  };
+  const data = rows.slice(1).map(r => ({
+    kabupatenKota: r[0] || '',
+    kodePenyedia: r[1] || '',
+    namaPenyedia: r[2] || '',
+    triwulan: r[3] || '',
+    jenisAnomali: r[4] || '',
+    keterangan: r[5] || '',
+  }));
+  return { data, notes };
+}

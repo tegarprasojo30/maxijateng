@@ -41,7 +41,7 @@ export default function ProgressPage({
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="construction-header py-6 px-4">
+      <header className="construction-header py-6 px-4 sticky top-0 z-20">
         <div className="max-w-full mx-auto">
           <div className="flex items-center gap-3 mb-1">
             <TrendingUp className="h-7 w-7" />

@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard.tsx";
 import DataLPSE from "./pages/Index.tsx";
 import ProgressSKTH from "./pages/ProgressSKTH.tsx";
 import ProgressSKTR from "./pages/ProgressSKTR.tsx";
+import AnomaliSKTR from "./pages/AnomaliSKTR.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -39,6 +40,7 @@ const App = () => (
             <Route path="/data-lpse" element={<DataLPSE />} />
             <Route path="/skth-2025/progres" element={<ProgressSKTH />} />
             <Route path="/sktr-2026/progres" element={<ProgressSKTR />} />
+            <Route path="/sktr-2026/anomali-data" element={<AnomaliSKTR />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AppLayout>
