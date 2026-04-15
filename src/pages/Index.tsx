@@ -148,13 +148,13 @@ export default function Index() {
             <Table>
               <TableHeader className="sticky top-0 z-10">
                 <TableRow className="bg-muted">
-                  <TableHead rowSpan={2} className="font-semibold w-12 align-middle border-r bg-muted">#</TableHead>
-                  <TableHead rowSpan={2} className="font-semibold align-middle border-r bg-muted">Kabupaten/Kota</TableHead>
-                  <TableHead rowSpan={2} className="font-semibold align-middle border-r bg-muted">Nama Penyedia</TableHead>
-                  <TableHead rowSpan={2} className="font-semibold align-middle border-r bg-muted">Alamat</TableHead>
-                  <TableHead rowSpan={2} className="font-semibold align-middle border-r bg-muted">Skala Usaha</TableHead>
-                  <TableHead colSpan={2} className="font-semibold text-center border-r bg-muted">Jumlah Proyek</TableHead>
-                  <TableHead rowSpan={2} className="font-semibold align-middle border-r bg-muted">Total Nilai Proyek 2025-2026</TableHead>
+                  <TableHead rowSpan={2} className="font-semibold w-12 text-center align-middle border-r bg-muted">#</TableHead>
+                  <TableHead rowSpan={2} className="font-semibold text-center align-middle border-r bg-muted">Kabupaten/Kota</TableHead>
+                  <TableHead rowSpan={2} className="font-semibold text-center align-middle border-r bg-muted">Nama Penyedia</TableHead>
+                  <TableHead rowSpan={2} className="font-semibold text-center align-middle border-r bg-muted">Alamat</TableHead>
+                  <TableHead rowSpan={2} className="font-semibold text-center align-middle border-r bg-muted">Skala Usaha</TableHead>
+                  <TableHead colSpan={2} className="font-semibold text-center align-middle border-r bg-muted">Jumlah Proyek</TableHead>
+                  <TableHead rowSpan={2} className="font-semibold text-center align-middle border-r bg-muted">Total Nilai Proyek 2025-2026</TableHead>
                   <TableHead rowSpan={2} className="font-semibold text-center align-middle bg-muted">Aksi</TableHead>
                 </TableRow>
                 <TableRow className="bg-muted/80">
