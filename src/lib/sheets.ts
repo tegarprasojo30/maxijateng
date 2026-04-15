@@ -314,9 +314,3 @@ export async function fetchAnomaliSKTR(): Promise<{ data: AnomaliSKTR[]; notes: 
   }));
   return { data, notes };
 }
-  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=GRAFIKSKTR1`;
-  const res = await fetch(url);
-  const csv = await res.text();
-  const rows = parseCSV(csv);
-  return parseGrafikRows(rows);
-}
