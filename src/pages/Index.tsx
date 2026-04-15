@@ -154,12 +154,12 @@ export default function Index() {
                   <TableHead rowSpan={2} className="font-semibold align-middle border-r bg-muted">Alamat</TableHead>
                   <TableHead rowSpan={2} className="font-semibold align-middle border-r bg-muted">Skala Usaha</TableHead>
                   <TableHead colSpan={2} className="font-semibold text-center border-r bg-muted">Jumlah Proyek</TableHead>
-                  <TableHead rowSpan={2} className="font-semibold align-middle border-r bg-muted">Total Nilai Proyek 2025</TableHead>
+                  <TableHead rowSpan={2} className="font-semibold align-middle border-r bg-muted">Total Nilai Proyek 2025-2026</TableHead>
                   <TableHead rowSpan={2} className="font-semibold text-center align-middle bg-muted">Aksi</TableHead>
                 </TableRow>
                 <TableRow className="bg-muted/80">
-                  <TableHead className="font-medium text-center text-xs border-r bg-muted">2025</TableHead>
-                  <TableHead className="font-medium text-center text-xs border-r bg-muted">2026 Tw I</TableHead>
+                  <TableHead className="font-semibold text-center text-xs border-r bg-muted">2025</TableHead>
+                  <TableHead className="font-semibold text-center text-xs border-r bg-muted">2026</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
