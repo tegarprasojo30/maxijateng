@@ -1,4 +1,4 @@
-import { LayoutDashboard, TrendingUp, List, RefreshCw, AlertTriangle, Download, BookOpen, ChevronDown, Database } from "lucide-react";
+import { LayoutDashboard, TrendingUp, List, RefreshCw, AlertTriangle, BookOpen, ChevronDown, Database } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { NavLink } from "@/components/NavLink";
 import {
@@ -45,30 +45,20 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarContent className="pt-2">
-        {/* Logo & Title */}
         {!collapsed && (
           <div className="px-4 pt-1 pb-3 flex flex-col items-center gap-2 border-b border-sidebar-border mb-2">
-            <img
-              src="https://i.ibb.co/k68sM7PM/maxijateng.png"
-              alt="Logo Monev"
-              className="w-48 h-32 object-contain rounded-lg"
-            />
+            <img src="https://i.ibb.co/k68sM7PM/maxijateng.png" alt="Logo Monev" className="w-48 h-32 object-contain rounded-lg" />
           </div>
         )}
         {collapsed && (
           <div className="flex justify-center py-3 border-b border-sidebar-border mb-2">
-            <img
-              src="https://i.ibb.co/k68sM7PM/maxijateng.png"
-              alt="Logo"
-              className="w-8 h-4 object-contain rounded"
-            />
+            <img src="https://i.ibb.co/k68sM7PM/maxijateng.png" alt="Logo" className="w-8 h-4 object-contain rounded" />
           </div>
         )}
 
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {/* Dashboard */}
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <NavLink to="/" end activeClassName="bg-sidebar-accent text-sidebar-primary font-semibold">
@@ -78,7 +68,6 @@ export function AppSidebar() {
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
-              {/* Data LPSE */}
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <NavLink to="/data-lpse" activeClassName="bg-sidebar-accent text-sidebar-primary font-semibold">
@@ -160,23 +149,13 @@ export function AppSidebar() {
                 </SidebarMenuItem>
               </Collapsible>
 
-              {/* Download */}
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <a href="#" onClick={handleComingSoon} className="flex items-center">
-                    <Download className="h-4 w-4 mr-2" />
-                    {!collapsed && <span>Download</span>}
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-
               {/* Pedoman */}
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href="#" onClick={handleComingSoon} className="flex items-center">
+                  <NavLink to="/pedoman" activeClassName="bg-sidebar-accent text-sidebar-primary font-semibold">
                     <BookOpen className="h-4 w-4 mr-2" />
                     {!collapsed && <span>Pedoman</span>}
-                  </a>
+                  </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>

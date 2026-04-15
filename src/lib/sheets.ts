@@ -285,15 +285,17 @@ export async function fetchGrafikSKTR1(): Promise<GrafikData> {
 
 export interface AnomaliSKTR {
   kabupatenKota: string;
-  kodePenyedia: string;
-  namaPenyedia: string;
   triwulan: string;
+  namaPerusahaan: string;
+  skalaUsaha: string;
+  namaProyek: string;
   jenisAnomali: string;
-  keterangan: string;
+  catatan: string;
 }
 
 export interface AnomaliNotes {
-  note: string;
+  note1: string;
+  note2: string;
 }
 
 export async function fetchAnomaliSKTR(): Promise<{ data: AnomaliSKTR[]; notes: AnomaliNotes }> {
@@ -302,15 +304,33 @@ export async function fetchAnomaliSKTR(): Promise<{ data: AnomaliSKTR[]; notes: 
   const csv = await res.text();
   const rows = parseCSV(csv);
   const notes: AnomaliNotes = {
-    note: rows[0]?.[10] || '',
+    note1: rows[0]?.[10] || '',
+    note2: rows[1]?.[10] || '',
   };
   const data = rows.slice(1).map(r => ({
     kabupatenKota: r[0] || '',
-    kodePenyedia: r[1] || '',
-    namaPenyedia: r[2] || '',
-    triwulan: r[3] || '',
-    jenisAnomali: r[4] || '',
-    keterangan: r[5] || '',
+    triwulan: r[1] || '',
+    namaPerusahaan: r[2] || '',
+    skalaUsaha: r[3] || '',
+    namaProyek: r[4] || '',
+    jenisAnomali: r[5] || '',
+    catatan: r[6] || '',
   }));
   return { data, notes };
+}
+
+export interface PedomanItem {
+  judul: string;
+  link: string;
+}
+
+export async function fetchPedoman(): Promise<PedomanItem[]> {
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=PEDOMAN`;
+  const res = await fetch(url);
+  const csv = await res.text();
+  const rows = parseCSV(csv);
+  return rows.slice(1).filter(r => r[0]).map(r => ({
+    judul: r[0] || '',
+    link: r[1] || '',
+  }));
 }
