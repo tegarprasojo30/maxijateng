@@ -24,6 +24,12 @@ export default function Index() {
     staleTime: 5 * 60 * 1000,
   });
 
+  const { data: masterNote = '' } = useQuery({
+    queryKey: ["masterNote"],
+    queryFn: fetchMasterNote,
+    staleTime: 5 * 60 * 1000,
+  });
+
   const [filter, setFilter] = useState<string>("all");
   const [search, setSearch] = useState("");
   const [skalaFilter, setSkalaFilter] = useState<string>("all");
