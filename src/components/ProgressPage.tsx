@@ -7,6 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Loader2, TrendingUp, Target, FolderOpen, CheckCircle, XCircle, ShieldCheck, FileDown, FileText } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
 import { useEffect, useState } from "react";
+import * as XLSX from "xlsx";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 interface ProgressPageProps {
   title: string;
