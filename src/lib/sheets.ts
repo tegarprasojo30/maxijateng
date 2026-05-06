@@ -316,6 +316,7 @@ export async function fetchAnomaliSKTR(): Promise<{ data: AnomaliSKTR[]; notes: 
     namaProyek: r[4] || '',
     jenisAnomali: r[5] || '',
     catatan: r[6] || '',
+    konfirmasi: r[7] || '',
   }));
   return { data, notes };
 }
