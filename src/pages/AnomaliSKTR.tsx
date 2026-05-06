@@ -120,7 +120,7 @@ export default function AnomaliSKTR() {
             <AlertTriangle className="h-7 w-7" />
             <h1 className="text-xl md:text-2xl font-bold tracking-tight">Anomali Data SKTR 2026</h1>
           </div>
-          <p className="text-sm opacity-80 ml-10">Data anomali hasil pencacahan Survei Perusahaan Konstruksi Triwulanan</p>
+          <p className="text-sm opacity-80 ml-10">Hasil Pencacahan Survei Perusahaan Konstruksi Triwulanan</p>
         </div>
       </header>
 
@@ -162,7 +162,7 @@ export default function AnomaliSKTR() {
         {isLoading ? (
           <div className="flex items-center justify-center py-20">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            <span className="ml-3 text-muted-foreground font-medium">Memuat data anomali...</span>
+            <span className="ml-3 text-muted-foreground font-medium">Memuat anomali data...</span>
           </div>
         ) : (
           <>
