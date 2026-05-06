@@ -345,14 +345,15 @@ export async function fetchMasterNote(): Promise<string> {
   return rows[0]?.[0] || '';
 }
 
+import { KONFIRM_ANOMALI_URL } from './config';
+
 export async function submitKonfirmAnomali(payload: {
   kabupatenKota: string; triwulan: string; namaPerusahaan: string;
   skalaUsaha: string; namaProyek: string; jenisAnomali: string;
   catatan: string; konfirmasi: string;
 }): Promise<void> {
-  const url = (import.meta as any).env.VITE_KONFIRM_ANOMALI_URL as string | undefined;
-  if (!url) throw new Error('URL endpoint belum dikonfigurasi');
-  await fetch(url, {
+  if (!KONFIRM_ANOMALI_URL) throw new Error('URL endpoint Google Apps Script belum diisi di src/lib/config.ts');
+  await fetch(KONFIRM_ANOMALI_URL, {
     method: 'POST',
     mode: 'no-cors',
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
