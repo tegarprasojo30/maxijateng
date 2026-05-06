@@ -243,6 +243,10 @@ export default function Index() {
             </div>
           </div>
         )}
+
+        {masterNote && (
+          <p className="text-sm text-muted-foreground italic px-1">{masterNote}</p>
+        )}
       </main>
 
       {/* Dialogs */}
