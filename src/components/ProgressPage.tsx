@@ -79,18 +79,6 @@ export default function ProgressPage({
       </header>
 
       <main className="max-w-full mx-auto px-4 py-6 space-y-6">
-        {/* Download buttons */}
-        <div className="flex gap-2 justify-end">
-          <Button variant="outline" size="sm" onClick={handleDownloadXlsx} disabled={!progressData.length}>
-            <FileDown className="h-4 w-4 mr-1.5" />
-            Unduh .xlsx
-          </Button>
-          <Button variant="outline" size="sm" onClick={handleDownloadPdf}>
-            <FileText className="h-4 w-4 mr-1.5" />
-            Unduh .pdf
-          </Button>
-        </div>
-
         {/* Grafik Tiles */}
         {grafikData && <GrafikTiles data={grafikData} />}
 
@@ -102,6 +90,16 @@ export default function ProgressPage({
           </div>
         ) : (
           <>
+            <div className="flex gap-2 justify-end">
+              <Button variant="outline" size="sm" onClick={handleDownloadXlsx} disabled={!progressData.length}>
+                <FileDown className="h-4 w-4 mr-1.5" />
+                Unduh .xlsx
+              </Button>
+              <Button variant="outline" size="sm" onClick={handleDownloadPdf} disabled={!progressData.length}>
+                <FileText className="h-4 w-4 mr-1.5" />
+                Unduh .pdf
+              </Button>
+            </div>
             <div className="rounded-xl border bg-card shadow-sm overflow-x-auto">
               <Table>
                 <TableHeader>
