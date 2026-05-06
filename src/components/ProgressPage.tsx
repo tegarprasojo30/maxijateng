@@ -43,26 +43,27 @@ export default function ProgressPage({
     return isNaN(num) ? 0 : num;
   };
 
+  const tableHeaders = ["No", "Kabupaten/Kota", "Target Sampel", "Open", "Submitted by Pencacah", "Approved by Pengawas", "Rejected by Pengawas", "Completed by Admin", "Progres"];
+
+  const tableRows = () => progressData.map((row, i) => {
+    const isTotal = row.kabupatenKota.toUpperCase().includes('JAWA TENGAH');
+    return [isTotal ? '' : (i + 1), row.kabupatenKota, row.targetSampel, row.open, row.submittedByPencacah, row.approvedByPengawas, row.rejectedByPengawas, row.completedByAdmin, row.progres];
+  });
+
   const handleDownloadXlsx = () => {
     if (!progressData.length) return;
-    const headers = ["No", "Kabupaten/Kota", "Target Sampel", "Open", "Submitted by Pencacah", "Approved by Pengawas", "Rejected by Pengawas", "Completed by Admin", "Progres"];
-    const csvRows = [headers.join("\t")];
-    progressData.forEach((row, i) => {
-      const isTotal = row.kabupatenKota.toUpperCase().includes('JAWA TENGAH');
-      csvRows.push([isTotal ? '' : (i + 1), row.kabupatenKota, row.targetSampel, row.open, row.submittedByPencacah, row.approvedByPengawas, row.rejectedByPengawas, row.completedByAdmin, row.progres].join("\t"));
-    });
-    const bom = '\uFEFF';
-    const blob = new Blob([bom + csvRows.join("\n")], { type: "application/vnd.ms-excel;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${title.replace(/\s+/g, '_')}.xls`;
-    a.click();
-    URL.revokeObjectURL(url);
+    const ws = XLSX.utils.aoa_to_sheet([tableHeaders, ...tableRows()]);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Progres");
+    XLSX.writeFile(wb, `${title.replace(/\s+/g, '_')}.xlsx`);
   };
 
   const handleDownloadPdf = () => {
-    window.print();
+    if (!progressData.length) return;
+    const doc = new jsPDF({ orientation: 'landscape' });
+    doc.text(title, 14, 14);
+    autoTable(doc, { head: [tableHeaders], body: tableRows() as any[][], startY: 20, styles: { fontSize: 8 } });
+    doc.save(`${title.replace(/\s+/g, '_')}.pdf`);
   };
 
   return (
