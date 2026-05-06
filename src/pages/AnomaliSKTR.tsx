@@ -92,7 +92,7 @@ export default function AnomaliSKTR() {
     setSubmitting(true);
     try {
       await submitKonfirmAnomali({ ...activeRow, konfirmasi: konfirmasiVal });
-      toast({ title: "Konfirmasi tersimpan", description: "Data telah dikirim ke sheet KONFIRMANOMALI." });
+      toast({ title: "Konfirmasi tersimpan", description: "Konfirmasi Tersimpan" });
       setConfirmOpen(false);
       setActiveRow(null);
     } catch (e: any) {
@@ -120,7 +120,7 @@ export default function AnomaliSKTR() {
             <AlertTriangle className="h-7 w-7" />
             <h1 className="text-xl md:text-2xl font-bold tracking-tight">Anomali Data SKTR 2026</h1>
           </div>
-          <p className="text-sm opacity-80 ml-10">Data anomali hasil pencacahan Survei Konstruksi Triwulanan</p>
+          <p className="text-sm opacity-80 ml-10">Data anomali hasil pencacahan Survei Perusahaan Konstruksi Triwulanan</p>
         </div>
       </header>
 
