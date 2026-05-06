@@ -291,6 +291,7 @@ export interface AnomaliSKTR {
   namaProyek: string;
   jenisAnomali: string;
   catatan: string;
+  konfirmasi: string;
 }
 
 export interface AnomaliNotes {
