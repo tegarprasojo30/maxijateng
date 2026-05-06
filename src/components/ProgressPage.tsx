@@ -7,6 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Loader2, TrendingUp, Target, FolderOpen, CheckCircle, XCircle, ShieldCheck, FileDown, FileText } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
 import { useEffect, useState } from "react";
+import * as XLSX from "xlsx";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 interface ProgressPageProps {
   title: string;
@@ -40,26 +43,27 @@ export default function ProgressPage({
     return isNaN(num) ? 0 : num;
   };
 
+  const tableHeaders = ["No", "Kabupaten/Kota", "Target Sampel", "Open", "Submitted by Pencacah", "Approved by Pengawas", "Rejected by Pengawas", "Completed by Admin", "Progres"];
+
+  const tableRows = () => progressData.map((row, i) => {
+    const isTotal = row.kabupatenKota.toUpperCase().includes('JAWA TENGAH');
+    return [isTotal ? '' : (i + 1), row.kabupatenKota, row.targetSampel, row.open, row.submittedByPencacah, row.approvedByPengawas, row.rejectedByPengawas, row.completedByAdmin, row.progres];
+  });
+
   const handleDownloadXlsx = () => {
     if (!progressData.length) return;
-    const headers = ["No", "Kabupaten/Kota", "Target Sampel", "Open", "Submitted by Pencacah", "Approved by Pengawas", "Rejected by Pengawas", "Completed by Admin", "Progres"];
-    const csvRows = [headers.join("\t")];
-    progressData.forEach((row, i) => {
-      const isTotal = row.kabupatenKota.toUpperCase().includes('JAWA TENGAH');
-      csvRows.push([isTotal ? '' : (i + 1), row.kabupatenKota, row.targetSampel, row.open, row.submittedByPencacah, row.approvedByPengawas, row.rejectedByPengawas, row.completedByAdmin, row.progres].join("\t"));
-    });
-    const bom = '\uFEFF';
-    const blob = new Blob([bom + csvRows.join("\n")], { type: "application/vnd.ms-excel;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${title.replace(/\s+/g, '_')}.xls`;
-    a.click();
-    URL.revokeObjectURL(url);
+    const ws = XLSX.utils.aoa_to_sheet([tableHeaders, ...tableRows()]);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Progres");
+    XLSX.writeFile(wb, `${title.replace(/\s+/g, '_')}.xlsx`);
   };
 
   const handleDownloadPdf = () => {
-    window.print();
+    if (!progressData.length) return;
+    const doc = new jsPDF({ orientation: 'landscape' });
+    doc.text(title, 14, 14);
+    autoTable(doc, { head: [tableHeaders], body: tableRows() as any[][], startY: 20, styles: { fontSize: 8 } });
+    doc.save(`${title.replace(/\s+/g, '_')}.pdf`);
   };
 
   return (
@@ -75,18 +79,6 @@ export default function ProgressPage({
       </header>
 
       <main className="max-w-full mx-auto px-4 py-6 space-y-6">
-        {/* Download buttons */}
-        <div className="flex gap-2 justify-end">
-          <Button variant="outline" size="sm" onClick={handleDownloadXlsx} disabled={!progressData.length}>
-            <FileDown className="h-4 w-4 mr-1.5" />
-            Unduh .xlsx
-          </Button>
-          <Button variant="outline" size="sm" onClick={handleDownloadPdf}>
-            <FileText className="h-4 w-4 mr-1.5" />
-            Unduh .pdf
-          </Button>
-        </div>
-
         {/* Grafik Tiles */}
         {grafikData && <GrafikTiles data={grafikData} />}
 
@@ -98,6 +90,16 @@ export default function ProgressPage({
           </div>
         ) : (
           <>
+            <div className="flex gap-2 justify-end">
+              <Button variant="outline" size="sm" onClick={handleDownloadXlsx} disabled={!progressData.length}>
+                <FileDown className="h-4 w-4 mr-1.5" />
+                Unduh .xlsx
+              </Button>
+              <Button variant="outline" size="sm" onClick={handleDownloadPdf} disabled={!progressData.length}>
+                <FileText className="h-4 w-4 mr-1.5" />
+                Unduh .pdf
+              </Button>
+            </div>
             <div className="rounded-xl border bg-card shadow-sm overflow-x-auto">
               <Table>
                 <TableHeader>

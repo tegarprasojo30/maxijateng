@@ -291,6 +291,7 @@ export interface AnomaliSKTR {
   namaProyek: string;
   jenisAnomali: string;
   catatan: string;
+  konfirmasi: string;
 }
 
 export interface AnomaliNotes {
@@ -315,6 +316,7 @@ export async function fetchAnomaliSKTR(): Promise<{ data: AnomaliSKTR[]; notes: 
     namaProyek: r[4] || '',
     jenisAnomali: r[5] || '',
     catatan: r[6] || '',
+    konfirmasi: r[7] || '',
   }));
   return { data, notes };
 }
@@ -333,4 +335,28 @@ export async function fetchPedoman(): Promise<PedomanItem[]> {
     judul: r[0] || '',
     link: r[1] || '',
   }));
+}
+
+export async function fetchMasterNote(): Promise<string> {
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=MASTER&range=W1`;
+  const res = await fetch(url);
+  const csv = await res.text();
+  const rows = parseCSV(csv);
+  return rows[0]?.[0] || '';
+}
+
+import { KONFIRM_ANOMALI_URL } from './config';
+
+export async function submitKonfirmAnomali(payload: {
+  kabupatenKota: string; triwulan: string; namaPerusahaan: string;
+  skalaUsaha: string; namaProyek: string; jenisAnomali: string;
+  catatan: string; konfirmasi: string;
+}): Promise<void> {
+  if (!KONFIRM_ANOMALI_URL) throw new Error('URL endpoint Google Apps Script belum diisi di src/lib/config.ts');
+  await fetch(KONFIRM_ANOMALI_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(payload),
+  });
 }

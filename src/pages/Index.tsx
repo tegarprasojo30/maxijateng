@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchPerusahaan, fetchProyek, type Perusahaan } from "@/lib/sheets";
+import { fetchPerusahaan, fetchProyek, fetchMasterNote, type Perusahaan } from "@/lib/sheets";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -21,6 +21,12 @@ export default function Index() {
   const { data: allProjects = [], isLoading: loadingProjects } = useQuery({
     queryKey: ["proyek"],
     queryFn: fetchProyek,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const { data: masterNote = '' } = useQuery({
+    queryKey: ["masterNote"],
+    queryFn: fetchMasterNote,
     staleTime: 5 * 60 * 1000,
   });
 
@@ -236,6 +242,10 @@ export default function Index() {
               </div>
             </div>
           </div>
+        )}
+
+        {masterNote && (
+          <p className="text-sm text-muted-foreground italic px-1">{masterNote}</p>
         )}
       </main>
 
