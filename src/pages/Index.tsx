@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchPerusahaan, fetchProyek, type Perusahaan } from "@/lib/sheets";
+import { fetchPerusahaan, fetchProyek, fetchMasterNote, type Perusahaan } from "@/lib/sheets";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
