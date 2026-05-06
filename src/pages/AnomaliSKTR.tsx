@@ -1,15 +1,18 @@
 import { useState, useMemo, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchAnomaliSKTR } from "@/lib/sheets";
+import { fetchAnomaliSKTR, submitKonfirmAnomali, type AnomaliSKTR } from "@/lib/sheets";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Loader2, AlertTriangle, Search, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
+import { Loader2, AlertTriangle, Search, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, CheckSquare } from "lucide-react";
 
 const PAGE_SIZE = 15;
 
 export default function AnomaliSKTR() {
+  const { toast } = useToast();
   const { data: result, isLoading } = useQuery({
     queryKey: ["anomaliSKTR"],
     queryFn: fetchAnomaliSKTR,
@@ -24,6 +27,11 @@ export default function AnomaliSKTR() {
   const [jenisFilter, setJenisFilter] = useState("all");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+
+  const [activeRow, setActiveRow] = useState<AnomaliSKTR | null>(null);
+  const [konfirmasiVal, setKonfirmasiVal] = useState<string>("");
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const kabOptions = useMemo(() => {
     const s = new Set<string>();
@@ -65,6 +73,44 @@ export default function AnomaliSKTR() {
   useEffect(() => { setPage(1); }, [kabFilter, triwulanFilter, jenisFilter, search]);
 
   const fmt = (n: number) => n.toLocaleString('id-ID');
+
+  const openKonfirmasi = (row: AnomaliSKTR) => {
+    setActiveRow(row);
+    setKonfirmasiVal("");
+  };
+
+  const handleSimpan = () => {
+    if (!konfirmasiVal) {
+      toast({ title: "Pilih konfirmasi terlebih dahulu", variant: "destructive" });
+      return;
+    }
+    setConfirmOpen(true);
+  };
+
+  const handleYa = async () => {
+    if (!activeRow) return;
+    setSubmitting(true);
+    try {
+      await submitKonfirmAnomali({ ...activeRow, konfirmasi: konfirmasiVal });
+      toast({ title: "Konfirmasi tersimpan", description: "Data telah dikirim ke sheet KONFIRMANOMALI." });
+      setConfirmOpen(false);
+      setActiveRow(null);
+    } catch (e: any) {
+      toast({ title: "Gagal menyimpan", description: e.message, variant: "destructive" });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const detailFields: { label: string; key: keyof AnomaliSKTR }[] = [
+    { label: "Kabupaten/Kota", key: "kabupatenKota" },
+    { label: "Triwulan", key: "triwulan" },
+    { label: "Nama Perusahaan", key: "namaPerusahaan" },
+    { label: "Skala Usaha", key: "skalaUsaha" },
+    { label: "Nama Proyek", key: "namaProyek" },
+    { label: "Jenis Anomali", key: "jenisAnomali" },
+    { label: "Catatan", key: "catatan" },
+  ];
 
   return (
     <div className="min-h-screen bg-background">
@@ -131,13 +177,15 @@ export default function AnomaliSKTR() {
                     <TableHead className="font-semibold border-r bg-muted">Skala Usaha</TableHead>
                     <TableHead className="font-semibold border-r bg-muted">Nama Proyek</TableHead>
                     <TableHead className="font-semibold border-r bg-muted">Jenis Anomali</TableHead>
-                    <TableHead className="font-semibold bg-muted">Catatan</TableHead>
+                    <TableHead className="font-semibold border-r bg-muted">Catatan</TableHead>
+                    <TableHead className="font-semibold border-r bg-muted">Konfirmasi</TableHead>
+                    <TableHead className="font-semibold text-center bg-muted">Aksi</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {paged.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={8} className="text-center py-12 text-muted-foreground">Tidak ada data ditemukan.</TableCell>
+                      <TableCell colSpan={10} className="text-center py-12 text-muted-foreground">Tidak ada data ditemukan.</TableCell>
                     </TableRow>
                   ) : (
                     paged.map((d, i) => (
@@ -149,7 +197,14 @@ export default function AnomaliSKTR() {
                         <TableCell className="text-sm border-r">{d.skalaUsaha}</TableCell>
                         <TableCell className="text-sm border-r">{d.namaProyek}</TableCell>
                         <TableCell className="text-sm border-r">{d.jenisAnomali}</TableCell>
-                        <TableCell className="text-sm">{d.catatan}</TableCell>
+                        <TableCell className="text-sm border-r">{d.catatan}</TableCell>
+                        <TableCell className="text-sm border-r">{d.konfirmasi}</TableCell>
+                        <TableCell className="text-center">
+                          <Button size="sm" variant="outline" onClick={() => openKonfirmasi(d)} className="gap-1.5">
+                            <CheckSquare className="h-3.5 w-3.5" />
+                            Konfirmasi
+                          </Button>
+                        </TableCell>
                       </TableRow>
                     ))
                   )}
@@ -179,6 +234,55 @@ export default function AnomaliSKTR() {
           </>
         )}
       </main>
+
+      {/* Detail / Konfirmasi Dialog */}
+      <Dialog open={!!activeRow} onOpenChange={(o) => { if (!o) setActiveRow(null); }}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Detail Anomali</DialogTitle>
+          </DialogHeader>
+          {activeRow && (
+            <div className="space-y-3">
+              {detailFields.map(f => (
+                <div key={f.key} className="grid grid-cols-3 gap-2 text-sm">
+                  <span className="font-medium text-muted-foreground">{f.label}</span>
+                  <span className="col-span-2">{activeRow[f.key] || '-'}</span>
+                </div>
+              ))}
+              <div className="pt-2">
+                <label className="text-sm font-medium mb-1.5 block">Konfirmasi</label>
+                <Select value={konfirmasiVal} onValueChange={setKonfirmasiVal}>
+                  <SelectTrigger><SelectValue placeholder="Pilih konfirmasi" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Perbaikan">Perbaikan</SelectItem>
+                    <SelectItem value="Sesuai">Sesuai</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setActiveRow(null)}>Batal</Button>
+            <Button onClick={handleSimpan}>Simpan</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Confirmation Dialog */}
+      <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Apakah Anda yakin?</DialogTitle>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setConfirmOpen(false)} disabled={submitting}>Tidak</Button>
+            <Button onClick={handleYa} disabled={submitting}>
+              {submitting && <Loader2 className="h-4 w-4 mr-1.5 animate-spin" />}
+              Ya
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
