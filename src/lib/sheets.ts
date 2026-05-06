@@ -336,3 +336,26 @@ export async function fetchPedoman(): Promise<PedomanItem[]> {
     link: r[1] || '',
   }));
 }
+
+export async function fetchMasterNote(): Promise<string> {
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=MASTER&range=W1`;
+  const res = await fetch(url);
+  const csv = await res.text();
+  const rows = parseCSV(csv);
+  return rows[0]?.[0] || '';
+}
+
+export async function submitKonfirmAnomali(payload: {
+  kabupatenKota: string; triwulan: string; namaPerusahaan: string;
+  skalaUsaha: string; namaProyek: string; jenisAnomali: string;
+  catatan: string; konfirmasi: string;
+}): Promise<void> {
+  const url = (import.meta as any).env.VITE_KONFIRM_ANOMALI_URL as string | undefined;
+  if (!url) throw new Error('URL endpoint belum dikonfigurasi');
+  await fetch(url, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(payload),
+  });
+}
