@@ -61,8 +61,8 @@ export function AppSidebar() {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to="/" end activeClassName="bg-sidebar-accent text-sidebar-primary font-semibold">
-                    <LayoutDashboard className="h-4 w-4 mr-2" />
+                  <NavLink to="/" end activeClassName="bg-sidebar-accent text-sidebar-primary font-semibold" className="flex items-center w-full">
+                    <LayoutDashboard className="h-4 w-4 mr-2 shrink-0" />
                     {!collapsed && <span>Dashboard</span>}
                   </NavLink>
                 </SidebarMenuButton>
@@ -70,8 +70,8 @@ export function AppSidebar() {
 
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to="/data-lpse" activeClassName="bg-sidebar-accent text-sidebar-primary font-semibold">
-                    <Database className="h-4 w-4 mr-2" />
+                  <NavLink to="/data-lpse" activeClassName="bg-sidebar-accent text-sidebar-primary font-semibold" className="flex items-center w-full">
+                    <Database className="h-4 w-4 mr-2 shrink-0" />
                     {!collapsed && <span>Data LPSE</span>}
                   </NavLink>
                 </SidebarMenuButton>
