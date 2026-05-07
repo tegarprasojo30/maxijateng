@@ -83,7 +83,7 @@ export function AppSidebar() {
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton className="w-full justify-between">
                       <div className="flex items-center">
-                        <BookOpen className="h-4 w-4 mr-2" />
+                        <BookOpen className="h-4 w-4 mr-4" />
                         {!collapsed && <span>SKTH 2025</span>}
                       </div>
                       {!collapsed && <ChevronDown className="h-3.5 w-3.5 transition-transform group-data-[state=open]/collapsible:rotate-180" />}
@@ -119,7 +119,7 @@ export function AppSidebar() {
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton className="w-full justify-between">
                       <div className="flex items-center">
-                        <BookOpen className="h-4 w-4 mr-2" />
+                        <BookOpen className="h-4 w-4 mr-4" />
                         {!collapsed && <span>SKTR 2026</span>}
                       </div>
                       {!collapsed && <ChevronDown className="h-3.5 w-3.5 transition-transform group-data-[state=open]/collapsible:rotate-180" />}
