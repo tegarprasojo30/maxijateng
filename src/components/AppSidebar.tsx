@@ -81,7 +81,7 @@ export function AppSidebar() {
               <Collapsible defaultOpen={currentPath.startsWith("/skth-2025")} className="group/collapsible">
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
-                    <SidebarMenuButton className="w-full">
+                    <SidebarMenuButton className="w-full justify-between">
                       <div className="flex items-center">
                         <BookOpen className="h-4 w-4 mr-2" />
                         {!collapsed && <span>SKTH 2025</span>}
@@ -117,7 +117,7 @@ export function AppSidebar() {
               <Collapsible defaultOpen={currentPath.startsWith("/sktr-2026")} className="group/collapsible">
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
-                    <SidebarMenuButton className="w-full">
+                    <SidebarMenuButton className="w-full justify-between">
                       <div className="flex items-center">
                         <BookOpen className="h-4 w-4 mr-2" />
                         {!collapsed && <span>SKTR 2026</span>}
