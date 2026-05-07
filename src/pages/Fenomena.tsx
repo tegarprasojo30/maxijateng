@@ -1,6 +1,6 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Newspaper, Loader2, ExternalLink, Calendar } from "lucide-react";
+import { Newspaper, Loader2, ExternalLink, Calendar, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
@@ -17,28 +17,79 @@ interface NewsItem {
 const QUERY = 'konstruksi OR "proyek konstruksi" "Jawa Tengah"';
 const YEAR = 2026;
 
+const FALLBACK_NEWS: NewsItem[] = [
+  {
+    title: "Pembangunan Infrastruktur Jawa Tengah Terus Berjalan di 2026",
+    link: "#",
+    pubDate: new Date().toISOString(),
+    description: "",
+    source: "Contoh Berita",
+  },
+  {
+    title: "Investasi Konstruksi di Jateng Meningkat Signifikan",
+    link: "#",
+    pubDate: new Date().toISOString(),
+    description: "",
+    source: "Contoh Berita",
+  },
+];
+
 async function fetchNews(): Promise<NewsItem[]> {
-  // Restrict to current year via Google News when= parameter
-  const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(QUERY + ` after:${YEAR}-01-01 before:${YEAR}-12-31`)}&hl=id&gl=ID&ceid=ID:id`;
-  const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}&count=50&_=${Date.now()}`;
-  const res = await fetch(apiUrl);
-  if (!res.ok) throw new Error("Gagal memuat berita");
-  const json = await res.json();
-  const items: NewsItem[] = (json.items || []).map((it: any) => {
-    const desc: string = it.description || "";
-    const sourceMatch = desc.match(/<font[^>]*>([^<]+)<\/font>/);
-    const thumbMatch = desc.match(/<img[^>]+src="([^"]+)"/);
-    const cleanDesc = desc.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
-    return {
-      title: it.title,
-      link: it.link,
-      pubDate: it.pubDate,
-      description: cleanDesc,
-      source: sourceMatch?.[1] || it.author || "",
-      thumbnail: thumbMatch?.[1],
-    };
-  });
-  return items.filter((i) => new Date(i.pubDate).getFullYear() === YEAR);
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 8000);
+
+  try {
+    const rssPath = `/rss-news/rss/search?q=${encodeURIComponent(QUERY)}&hl=id&gl=ID&ceid=ID:id&num=30`;
+    const res = await fetch(rssPath, { signal: controller.signal });
+
+    if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
+
+    const xmlText = await res.text();
+    clearTimeout(timeoutId);
+
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+    const itemElements = xmlDoc.querySelectorAll("item");
+
+    const items: NewsItem[] = [];
+
+    itemElements.forEach((item, index) => {
+      if (index >= 30) return;
+
+      const title = item.querySelector("title")?.textContent?.trim() || "";
+      const link = item.querySelector("link")?.textContent?.trim() || "";
+      const pubDate = item.querySelector("pubDate")?.textContent?.trim() || "";
+      const source = item.querySelector("source")?.textContent?.trim() || "";
+
+      // Extract thumbnail from media:content or description
+      const mediaContent = item.querySelector("media\\:content, content");
+      let thumbnail = mediaContent?.getAttribute("url") || "";
+
+      if (!thumbnail) {
+        const description = item.querySelector("description")?.innerHTML || "";
+        const thumbMatch = description.match(/<img[^>]+src="([^"]+)"/);
+        thumbnail = thumbMatch?.[1] || "";
+      }
+
+      if (title && link) {
+        items.push({ title, link, pubDate, description: "", source, thumbnail });
+      }
+    });
+
+    const filtered = items.filter(i => {
+      if (!i.pubDate) return true;
+      const year = new Date(i.pubDate).getFullYear();
+      return year >= 2025;
+    });
+
+    return filtered.length > 0 ? filtered : items;
+  } catch (err) {
+    clearTimeout(timeoutId);
+    if (err instanceof Error && err.name === "AbortError") {
+      throw new Error("Timeout: Koneksi terlalu lambat");
+    }
+    throw err;
+  }
 }
 
 const MONTHS = [
@@ -46,9 +97,12 @@ const MONTHS = [
   "Juli", "Agustus", "September", "Oktober", "November", "Desember",
 ];
 
+const PAGE_SIZE = 15;
+
 export default function Fenomena() {
   const [bulan, setBulan] = useState<string>("all");
   const [tahun, setTahun] = useState<string>(String(YEAR));
+  const [page, setPage] = useState(1);
 
   const { data, isLoading, error, refetch, isFetching } = useQuery({
     queryKey: ["fenomena"],
@@ -67,6 +121,11 @@ export default function Fenomena() {
     });
   }, [data, bulan, tahun]);
 
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  useEffect(() => { setPage(1); }, [bulan, tahun]);
+
   return (
     <div className="min-h-screen bg-background">
       <header className="construction-header py-6 px-4 sticky top-0 z-20">
@@ -84,7 +143,7 @@ export default function Fenomena() {
           <div className="flex flex-col gap-1">
             <label className="text-xs font-medium text-muted-foreground">Bulan</label>
             <Select value={bulan} onValueChange={setBulan}>
-              <SelectTrigger className="w-40"><SelectValue /></SelectTrigger>
+              <SelectTrigger className="w-40"><SelectValue placeholder="Semua Bulan" /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Semua Bulan</SelectItem>
                 {MONTHS.map((m, i) => <SelectItem key={i} value={String(i)}>{m}</SelectItem>)}
@@ -113,36 +172,79 @@ export default function Fenomena() {
             <span className="ml-3 text-muted-foreground font-medium">Memuat berita...</span>
           </div>
         ) : error ? (
-          <div className="text-center py-12 text-destructive">Gagal memuat berita. Coba refresh.</div>
+          <div>
+            <div className="text-center py-6 text-amber-600 dark:text-amber-400 mb-4">
+              Gagal memuat berita terbaru. Menampilkan data contoh.
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {FALLBACK_NEWS.map((item, i) => (
+                <Card key={i} className="hover:shadow-md transition-shadow flex flex-col">
+                  <CardContent className="p-4 flex flex-col gap-2 flex-1">
+                    <h3 className="font-semibold text-sm leading-snug line-clamp-3">{item.title}</h3>
+                    <div className="mt-auto pt-2 flex items-center justify-between text-xs text-muted-foreground">
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        <Calendar className="h-3 w-3 shrink-0" />
+                        <span className="truncate">{item.source}</span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-12 text-muted-foreground">Tidak ada berita untuk filter ini.</div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filtered.map((item, i) => (
-              <Card key={i} className="hover:shadow-md transition-shadow flex flex-col">
-                {item.thumbnail && (
-                  <img src={item.thumbnail} alt="" className="w-full h-40 object-cover rounded-t-lg" loading="lazy" />
-                )}
-                <CardContent className="p-4 flex flex-col gap-2 flex-1">
-                  <h3 className="font-semibold text-sm leading-snug line-clamp-3">{item.title}</h3>
-                  {item.description && (
-                    <p className="text-xs text-muted-foreground line-clamp-3">{item.description}</p>
+          <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {paged.map((item, i) => (
+                <Card key={i} className="hover:shadow-md transition-shadow flex flex-col">
+                  {item.thumbnail && (
+                    <img src={item.thumbnail} alt="" className="w-full h-40 object-cover rounded-t-lg" loading="lazy" />
                   )}
-                  <div className="mt-auto pt-2 flex items-center justify-between text-xs text-muted-foreground">
-                    <div className="flex items-center gap-1.5 min-w-0">
-                      <Calendar className="h-3 w-3 shrink-0" />
-                      <span className="truncate">
-                        {new Date(item.pubDate).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" })}
-                        {item.source ? ` · ${item.source}` : ""}
-                      </span>
+                  <CardContent className="p-4 flex flex-col gap-2 flex-1">
+                    <h3 className="font-semibold text-sm leading-snug line-clamp-3">{item.title}</h3>
+                    <div className="mt-auto pt-2 flex items-center justify-between text-xs text-muted-foreground">
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        <Calendar className="h-3 w-3 shrink-0" />
+                        <span className="truncate">
+                          {new Date(item.pubDate).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" })}
+                          {item.source ? ` · ${item.source}` : ""}
+                        </span>
+                      </div>
+                      <a href={item.link} target="_blank" rel="noopener noreferrer" className="text-primary inline-flex items-center gap-1 font-medium shrink-0">
+                        Baca <ExternalLink className="h-3 w-3" />
+                      </a>
                     </div>
-                    <a href={item.link} target="_blank" rel="noopener noreferrer" className="text-primary inline-flex items-center gap-1 font-medium shrink-0">
-                      Baca <ExternalLink className="h-3 w-3" />
-                    </a>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {totalPages > 1 && (
+              <div className="flex items-center justify-between px-4 py-3 mt-4">
+                <p className="text-sm text-muted-foreground">
+                  Menampilkan {Math.min((page - 1) * PAGE_SIZE + 1, filtered.length).toLocaleString("id-ID")}–{Math.min(page * PAGE_SIZE, filtered.length).toLocaleString("id-ID")} dari {filtered.length.toLocaleString("id-ID")} berita
+                </p>
+                <div className="flex items-center gap-1">
+                  <Button variant="outline" size="sm" onClick={() => setPage(1)} disabled={page === 1}>
+                    <ChevronsLeft className="h-4 w-4" />
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}>
+                    <ChevronLeft className="h-4 w-4" />
+                  </Button>
+                  <span className="px-3 text-sm font-medium">
+                    {page} / {totalPages}
+                  </span>
+                  <Button variant="outline" size="sm" onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}>
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={() => setPage(totalPages)} disabled={page === totalPages}>
+                    <ChevronsRight className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </main>
