@@ -149,11 +149,21 @@ export function AppSidebar() {
                 </SidebarMenuItem>
               </Collapsible>
 
+              {/* Fenomena */}
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink to="/fenomena" activeClassName="bg-sidebar-accent text-sidebar-primary font-semibold" className="flex items-center w-full">
+                    <Newspaper className="h-4 w-4 mr-2 shrink-0" />
+                    {!collapsed && <span>Fenomena</span>}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
               {/* Pedoman */}
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to="/pedoman" activeClassName="bg-sidebar-accent text-sidebar-primary font-semibold">
-                    <BookOpen className="h-4 w-4 mr-2" />
+                  <NavLink to="/pedoman" activeClassName="bg-sidebar-accent text-sidebar-primary font-semibold" className="flex items-center w-full">
+                    <BookOpen className="h-4 w-4 mr-2 shrink-0" />
                     {!collapsed && <span>Pedoman</span>}
                   </NavLink>
                 </SidebarMenuButton>
