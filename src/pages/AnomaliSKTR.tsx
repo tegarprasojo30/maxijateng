@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchAnomaliSKTR, submitKonfirmAnomali, type AnomaliSKTR } from "@/lib/sheets";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -13,6 +13,7 @@ const PAGE_SIZE = 15;
 
 export default function AnomaliSKTR() {
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const { data: result, isLoading } = useQuery({
     queryKey: ["anomaliSKTR"],
     queryFn: fetchAnomaliSKTR,
@@ -95,6 +96,7 @@ export default function AnomaliSKTR() {
       toast({ title: "Konfirmasi tersimpan", description: "Konfirmasi Tersimpan" });
       setConfirmOpen(false);
       setActiveRow(null);
+      await queryClient.invalidateQueries({ queryKey: ["anomaliSKTR"] });
     } catch (e: any) {
       toast({ title: "Gagal menyimpan", description: e.message, variant: "destructive" });
     } finally {
