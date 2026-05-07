@@ -52,33 +52,33 @@
   }
 
   .dark {
-    --background: 240 30% 8%;
-    --foreground: 230 30% 90%;
-    --card: 240 25% 12%;
-    --card-foreground: 230 30% 90%;
-    --popover: 240 25% 12%;
-    --popover-foreground: 230 30% 90%;
-    --primary: 250 60% 52%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 210 80% 55%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 240 20% 18%;
-    --muted-foreground: 230 15% 55%;
-    --accent: 240 30% 22%;
-    --accent-foreground: 230 30% 90%;
+    --background: 0 0% 6%;
+    --foreground: 30 30% 92%;
+    --card: 0 0% 10%;
+    --card-foreground: 30 30% 92%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 30 30% 92%;
+    --primary: 25 95% 55%;
+    --primary-foreground: 0 0% 5%;
+    --secondary: 20 90% 50%;
+    --secondary-foreground: 0 0% 5%;
+    --muted: 0 0% 14%;
+    --muted-foreground: 30 10% 65%;
+    --accent: 25 80% 30%;
+    --accent-foreground: 30 30% 95%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
-    --border: 240 25% 22%;
-    --input: 240 25% 22%;
-    --ring: 250 60% 52%;
-    --sidebar-background: 220 55% 12%;
-    --sidebar-foreground: 210 40% 92%;
-    --sidebar-primary: 210 80% 65%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 50% 18%;
-    --sidebar-accent-foreground: 210 40% 95%;
-    --sidebar-border: 220 45% 16%;
-    --sidebar-ring: 210 80% 65%;
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 25 95% 55%;
+    --sidebar-background: 0 0% 8%;
+    --sidebar-foreground: 30 30% 92%;
+    --sidebar-primary: 25 95% 55%;
+    --sidebar-primary-foreground: 0 0% 5%;
+    --sidebar-accent: 0 0% 14%;
+    --sidebar-accent-foreground: 30 30% 95%;
+    --sidebar-border: 0 0% 16%;
+    --sidebar-ring: 25 95% 55%;
   }
 }
 
@@ -101,12 +101,18 @@
   [data-sidebar="sidebar"] {
     background: linear-gradient(180deg, hsl(220 50% 22%) 0%, hsl(215 55% 16%) 50%, hsl(225 60% 12%) 100%) !important;
   }
+  .dark [data-sidebar="sidebar"] {
+    background: linear-gradient(180deg, hsl(0 0% 8%) 0%, hsl(20 40% 12%) 50%, hsl(25 50% 10%) 100%) !important;
+  }
 }
 
 @layer components {
   .construction-header {
     @apply bg-primary text-primary-foreground;
     background-image: linear-gradient(135deg, hsl(250 45% 20%) 0%, hsl(210 80% 55%) 100%);
+  }
+  .dark .construction-header {
+    background-image: linear-gradient(135deg, hsl(0 0% 8%) 0%, hsl(25 95% 50%) 100%);
   }
 
   .table-row-hover {

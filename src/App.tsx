@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import Dashboard from "./pages/Dashboard.tsx";
 import DataLPSE from "./pages/Index.tsx";
 import ProgressSKTH from "./pages/ProgressSKTH.tsx";
@@ -20,8 +21,9 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => (
     <div className="min-h-screen flex w-full">
       <AppSidebar />
       <div className="flex-1 flex flex-col min-w-0">
-        <header className="h-12 flex items-center border-b bg-card px-2">
+        <header className="h-12 flex items-center justify-between border-b bg-card px-2">
           <SidebarTrigger className="ml-1" />
+          <ThemeToggle />
         </header>
         <main className="flex-1">{children}</main>
       </div>
