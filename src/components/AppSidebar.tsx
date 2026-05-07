@@ -1,4 +1,4 @@
-import { LayoutDashboard, TrendingUp, List, RefreshCw, AlertTriangle, BookOpen, ChevronDown, Database } from "lucide-react";
+import { LayoutDashboard, TrendingUp, List, RefreshCw, AlertTriangle, BookOpen, ChevronDown, Database, Newspaper } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { NavLink } from "@/components/NavLink";
 import {
@@ -61,8 +61,8 @@ export function AppSidebar() {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to="/" end activeClassName="bg-sidebar-accent text-sidebar-primary font-semibold">
-                    <LayoutDashboard className="h-4 w-4 mr-2" />
+                  <NavLink to="/" end activeClassName="bg-sidebar-accent text-sidebar-primary font-semibold" className="flex items-center w-full">
+                    <LayoutDashboard className="h-4 w-4 mr-2 shrink-0" />
                     {!collapsed && <span>Dashboard</span>}
                   </NavLink>
                 </SidebarMenuButton>
@@ -70,8 +70,8 @@ export function AppSidebar() {
 
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to="/data-lpse" activeClassName="bg-sidebar-accent text-sidebar-primary font-semibold">
-                    <Database className="h-4 w-4 mr-2" />
+                  <NavLink to="/data-lpse" activeClassName="bg-sidebar-accent text-sidebar-primary font-semibold" className="flex items-center w-full">
+                    <Database className="h-4 w-4 mr-2 shrink-0" />
                     {!collapsed && <span>Data LPSE</span>}
                   </NavLink>
                 </SidebarMenuButton>
@@ -149,11 +149,21 @@ export function AppSidebar() {
                 </SidebarMenuItem>
               </Collapsible>
 
+              {/* Fenomena */}
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink to="/fenomena" activeClassName="bg-sidebar-accent text-sidebar-primary font-semibold" className="flex items-center w-full">
+                    <Newspaper className="h-4 w-4 mr-2 shrink-0" />
+                    {!collapsed && <span>Fenomena</span>}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
               {/* Pedoman */}
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to="/pedoman" activeClassName="bg-sidebar-accent text-sidebar-primary font-semibold">
-                    <BookOpen className="h-4 w-4 mr-2" />
+                  <NavLink to="/pedoman" activeClassName="bg-sidebar-accent text-sidebar-primary font-semibold" className="flex items-center w-full">
+                    <BookOpen className="h-4 w-4 mr-2 shrink-0" />
                     {!collapsed && <span>Pedoman</span>}
                   </NavLink>
                 </SidebarMenuButton>

@@ -12,6 +12,7 @@ import ProgressSKTH from "./pages/ProgressSKTH.tsx";
 import ProgressSKTR from "./pages/ProgressSKTR.tsx";
 import AnomaliSKTR from "./pages/AnomaliSKTR.tsx";
 import Pedoman from "./pages/Pedoman.tsx";
+import Fenomena from "./pages/Fenomena.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -44,6 +45,7 @@ const App = () => (
             <Route path="/skth-2025/progres" element={<ProgressSKTH />} />
             <Route path="/sktr-2026/progres" element={<ProgressSKTR />} />
             <Route path="/sktr-2026/anomali-data" element={<AnomaliSKTR />} />
+            <Route path="/fenomena" element={<Fenomena />} />
             <Route path="/pedoman" element={<Pedoman />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
