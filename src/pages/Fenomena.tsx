@@ -36,53 +36,29 @@ const FALLBACK_NEWS: NewsItem[] = [
 
 async function fetchNews(): Promise<NewsItem[]> {
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 8000);
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
 
   try {
-    const rssPath = `/rss-news/rss/search?q=${encodeURIComponent(QUERY)}&hl=id&gl=ID&ceid=ID:id&num=30`;
-    const res = await fetch(rssPath, { signal: controller.signal });
+    const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(QUERY)}&hl=id&gl=ID&ceid=ID:id&num=30`;
+    const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}&count=30`;
 
-    if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
+    const res = await fetch(apiUrl, { signal: controller.signal });
 
-    const xmlText = await res.text();
+    if (!res.ok) throw new Error("rss2json failed");
+
+    const json = await res.json();
+    if (json.status !== "ok") throw new Error("rss2json error");
+
     clearTimeout(timeoutId);
 
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xmlText, "text/xml");
-    const itemElements = xmlDoc.querySelectorAll("item");
-
-    const items: NewsItem[] = [];
-
-    itemElements.forEach((item, index) => {
-      if (index >= 30) return;
-
-      const title = item.querySelector("title")?.textContent?.trim() || "";
-      const link = item.querySelector("link")?.textContent?.trim() || "";
-      const pubDate = item.querySelector("pubDate")?.textContent?.trim() || "";
-      const source = item.querySelector("source")?.textContent?.trim() || "";
-
-      // Extract thumbnail from media:content or description
-      const mediaContent = item.querySelector("media\\:content, content");
-      let thumbnail = mediaContent?.getAttribute("url") || "";
-
-      if (!thumbnail) {
-        const description = item.querySelector("description")?.innerHTML || "";
-        const thumbMatch = description.match(/<img[^>]+src="([^"]+)"/);
-        thumbnail = thumbMatch?.[1] || "";
-      }
-
-      if (title && link) {
-        items.push({ title, link, pubDate, description: "", source, thumbnail });
-      }
-    });
-
-    const filtered = items.filter(i => {
-      if (!i.pubDate) return true;
-      const year = new Date(i.pubDate).getFullYear();
-      return year >= 2025;
-    });
-
-    return filtered.length > 0 ? filtered : items;
+    return (json.items || []).slice(0, 30).map((it: any) => ({
+      title: (it.title || "").replace(/<[^>]+>/g, "").trim(),
+      link: it.link || "",
+      pubDate: it.pubDate || "",
+      source: it.author || "",
+      thumbnail: it.thumbnail || "",
+      description: "",
+    }));
   } catch (err) {
     clearTimeout(timeoutId);
     if (err instanceof Error && err.name === "AbortError") {
