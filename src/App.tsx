@@ -21,8 +21,9 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => (
     <div className="min-h-screen flex w-full">
       <AppSidebar />
       <div className="flex-1 flex flex-col min-w-0">
-        <header className="h-12 flex items-center border-b bg-card px-2">
+        <header className="h-12 flex items-center justify-between border-b bg-card px-2">
           <SidebarTrigger className="ml-1" />
+          <ThemeToggle />
         </header>
         <main className="flex-1">{children}</main>
       </div>
