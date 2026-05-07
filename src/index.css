@@ -101,6 +101,9 @@
   [data-sidebar="sidebar"] {
     background: linear-gradient(180deg, hsl(220 50% 22%) 0%, hsl(215 55% 16%) 50%, hsl(225 60% 12%) 100%) !important;
   }
+  .dark [data-sidebar="sidebar"] {
+    background: linear-gradient(180deg, hsl(0 0% 8%) 0%, hsl(20 40% 12%) 50%, hsl(25 50% 10%) 100%) !important;
+  }
 }
 
 @layer components {
