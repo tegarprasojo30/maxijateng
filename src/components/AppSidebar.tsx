@@ -1,4 +1,4 @@
-import { LayoutDashboard, TrendingUp, List, RefreshCw, AlertTriangle, BookOpen, ChevronDown, Database } from "lucide-react";
+import { LayoutDashboard, TrendingUp, List, RefreshCw, AlertTriangle, BookOpen, ChevronDown, Database, Newspaper } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { NavLink } from "@/components/NavLink";
 import {
