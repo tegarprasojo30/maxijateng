@@ -12,6 +12,7 @@ import ProgressSKTH from "./pages/ProgressSKTH.tsx";
 import ProgressSKTR from "./pages/ProgressSKTR.tsx";
 import AnomaliSKTR from "./pages/AnomaliSKTR.tsx";
 import Pedoman from "./pages/Pedoman.tsx";
+import Fenomena from "./pages/Fenomena.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
