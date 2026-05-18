@@ -236,20 +236,30 @@ export default function Fenomena() {
         ) : (
           <div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {paged.map((item, i) => (
+              {paged.map((item, i) => {
+                const lastDash = item.title.lastIndexOf(" - ");
+                const derivedSource = lastDash > 0 ? item.title.slice(lastDash + 3).trim() : "";
+                const cleanTitle = lastDash > 0 ? item.title.slice(0, lastDash).trim() : item.title;
+                const sourceLabel = item.source || derivedSource;
+                return (
                 <Card key={i} className="hover:shadow-md transition-shadow flex flex-col">
                   {item.thumbnail && (
                     <img src={item.thumbnail} alt="" className="w-full h-40 object-cover rounded-t-lg" loading="lazy" />
                   )}
                   <CardContent className="p-4 flex flex-col gap-2 flex-1">
-                    <h3 className="font-semibold text-sm leading-snug line-clamp-3">{item.title}</h3>
-                    <div className="mt-auto pt-2 flex items-center justify-between text-xs text-muted-foreground">
-                      <div className="flex items-center gap-1.5 min-w-0">
+                    <h3 className="font-semibold text-sm leading-snug line-clamp-3">{cleanTitle}</h3>
+                    <div className="mt-auto pt-2 flex items-center justify-between text-xs text-muted-foreground gap-2">
+                      <div className="flex items-center gap-1.5 min-w-0 flex-1">
                         <Calendar className="h-3 w-3 shrink-0" />
-                        <span className="truncate">
+                        <span className="shrink-0">
                           {new Date(item.pubDate).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" })}
-                          {item.source ? ` · ${item.source}` : ""}
                         </span>
+                        {sourceLabel && (
+                          <>
+                            <span className="shrink-0">·</span>
+                            <span className="truncate font-medium text-foreground/70">{sourceLabel}</span>
+                          </>
+                        )}
                       </div>
                       <a href={item.link} target="_blank" rel="noopener noreferrer" className="text-primary inline-flex items-center gap-1 font-medium shrink-0">
                         Baca <ExternalLink className="h-3 w-3" />
@@ -257,7 +267,7 @@ export default function Fenomena() {
                     </div>
                   </CardContent>
                 </Card>
-              ))}
+              );})}
             </div>
 
             {totalPages > 1 && (
