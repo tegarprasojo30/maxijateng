@@ -34,62 +34,82 @@ const FALLBACK_NEWS: NewsItem[] = [
   },
 ];
 
+const GNEWS_RSS = `https://news.google.com/rss/search?q=${encodeURIComponent(QUERY)}&hl=id&gl=ID&ceid=ID:id`;
+
+function parseRss(xmlText: string): NewsItem[] {
+  const parser = new DOMParser();
+  const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+  const itemElements = xmlDoc.querySelectorAll("item");
+  const items: NewsItem[] = [];
+
+  itemElements.forEach((item, index) => {
+    if (index >= 30) return;
+    const title = item.querySelector("title")?.textContent?.trim() || "";
+    const link = item.querySelector("link")?.textContent?.trim() || "";
+    const pubDate = item.querySelector("pubDate")?.textContent?.trim() || "";
+    const source = item.querySelector("source")?.textContent?.trim() || "";
+    const description = item.querySelector("description")?.innerHTML || "";
+    const thumbMatch = description.match(/<img[^>]+src="([^"]+)"/);
+    const thumbnail = thumbMatch?.[1] || "";
+    if (title && link) items.push({ title, link, pubDate, description: "", source, thumbnail });
+  });
+  return items;
+}
+
+async function fetchViaProxy(proxyUrl: string, signal: AbortSignal): Promise<NewsItem[]> {
+  const res = await fetch(proxyUrl, { signal });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const contentType = res.headers.get("content-type") || "";
+
+  if (contentType.includes("application/json")) {
+    const json = await res.json();
+    // rss2json format
+    if (Array.isArray(json.items)) {
+      return json.items.slice(0, 30).map((it: any) => ({
+        title: it.title || "",
+        link: it.link || "",
+        pubDate: it.pubDate || "",
+        description: "",
+        source: it.author || (it.source && it.source.title) || "",
+        thumbnail: it.thumbnail || it.enclosure?.link || "",
+      })).filter((i: NewsItem) => i.title && i.link);
+    }
+    // allorigins {contents}
+    if (typeof json.contents === "string") return parseRss(json.contents);
+  }
+  const text = await res.text();
+  return parseRss(text);
+}
+
 async function fetchNews(): Promise<NewsItem[]> {
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 8000);
+  const timeoutId = setTimeout(() => controller.abort(), 12000);
 
-  try {
-    const rssPath = `/rss-news/rss/search?q=${encodeURIComponent(QUERY)}&hl=id&gl=ID&ceid=ID:id&num=30`;
-    const res = await fetch(rssPath, { signal: controller.signal });
+  const proxies = [
+    `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(GNEWS_RSS)}&count=30`,
+    `https://api.allorigins.win/get?url=${encodeURIComponent(GNEWS_RSS)}`,
+    `https://corsproxy.io/?${encodeURIComponent(GNEWS_RSS)}`,
+  ];
 
-    if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
-
-    const xmlText = await res.text();
-    clearTimeout(timeoutId);
-
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xmlText, "text/xml");
-    const itemElements = xmlDoc.querySelectorAll("item");
-
-    const items: NewsItem[] = [];
-
-    itemElements.forEach((item, index) => {
-      if (index >= 30) return;
-
-      const title = item.querySelector("title")?.textContent?.trim() || "";
-      const link = item.querySelector("link")?.textContent?.trim() || "";
-      const pubDate = item.querySelector("pubDate")?.textContent?.trim() || "";
-      const source = item.querySelector("source")?.textContent?.trim() || "";
-
-      // Extract thumbnail from media:content or description
-      const mediaContent = item.querySelector("media\\:content, content");
-      let thumbnail = mediaContent?.getAttribute("url") || "";
-
-      if (!thumbnail) {
-        const description = item.querySelector("description")?.innerHTML || "";
-        const thumbMatch = description.match(/<img[^>]+src="([^"]+)"/);
-        thumbnail = thumbMatch?.[1] || "";
+  let lastErr: unknown = null;
+  for (const proxy of proxies) {
+    try {
+      const items = await fetchViaProxy(proxy, controller.signal);
+      if (items.length > 0) {
+        clearTimeout(timeoutId);
+        const filtered = items.filter(i => {
+          if (!i.pubDate) return true;
+          const year = new Date(i.pubDate).getFullYear();
+          return isNaN(year) || year >= 2025;
+        });
+        return filtered.length > 0 ? filtered : items;
       }
-
-      if (title && link) {
-        items.push({ title, link, pubDate, description: "", source, thumbnail });
-      }
-    });
-
-    const filtered = items.filter(i => {
-      if (!i.pubDate) return true;
-      const year = new Date(i.pubDate).getFullYear();
-      return year >= 2025;
-    });
-
-    return filtered.length > 0 ? filtered : items;
-  } catch (err) {
-    clearTimeout(timeoutId);
-    if (err instanceof Error && err.name === "AbortError") {
-      throw new Error("Timeout: Koneksi terlalu lambat");
+    } catch (err) {
+      lastErr = err;
     }
-    throw err;
   }
+  clearTimeout(timeoutId);
+  throw lastErr instanceof Error ? lastErr : new Error("Gagal memuat berita");
 }
 
 const MONTHS = [
