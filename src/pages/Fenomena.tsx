@@ -14,8 +14,12 @@ interface NewsItem {
   thumbnail?: string;
 }
 
-const QUERY = 'konstruksi OR "proyek konstruksi" "Jawa Tengah"';
 const YEAR = 2026;
+const NEWS_QUERIES = [
+  `konstruksi Jawa Tengah after:${YEAR}-01-01 before:${YEAR + 1}-01-01`,
+  `proyek pembangunan Jawa Tengah after:${YEAR}-01-01 before:${YEAR + 1}-01-01`,
+  `infrastruktur Jawa Tengah after:${YEAR}-01-01 before:${YEAR + 1}-01-01`,
+];
 
 const FALLBACK_NEWS: NewsItem[] = [
   {
@@ -34,7 +38,16 @@ const FALLBACK_NEWS: NewsItem[] = [
   },
 ];
 
-const GNEWS_RSS = `https://news.google.com/rss/search?q=${encodeURIComponent(QUERY)}&hl=id&gl=ID&ceid=ID:id`;
+const buildGoogleNewsRss = (query: string) =>
+  `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=id&gl=ID&ceid=ID:id`;
+
+function parseNewsDate(dateText: string) {
+  const normalized = dateText.includes(" ") && !dateText.includes("T")
+    ? dateText.replace(" ", "T")
+    : dateText;
+  const date = new Date(normalized);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
 
 function parseRss(xmlText: string): NewsItem[] {
   const parser = new DOMParser();
@@ -63,6 +76,7 @@ async function fetchViaProxy(proxyUrl: string, signal: AbortSignal): Promise<New
 
   if (contentType.includes("application/json")) {
     const json = await res.json();
+    if (json.status === "error") throw new Error(json.message || "RSS proxy error");
     // rss2json format
     if (Array.isArray(json.items)) {
       return json.items.slice(0, 30).map((it: any) => ({
@@ -82,34 +96,37 @@ async function fetchViaProxy(proxyUrl: string, signal: AbortSignal): Promise<New
 }
 
 async function fetchNews(): Promise<NewsItem[]> {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 12000);
+  const fetchOne = async (query: string) => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000);
+    const rssUrl = buildGoogleNewsRss(query);
+    const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
 
-  const proxies = [
-    `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(GNEWS_RSS)}&count=30`,
-    `https://api.allorigins.win/get?url=${encodeURIComponent(GNEWS_RSS)}`,
-    `https://corsproxy.io/?${encodeURIComponent(GNEWS_RSS)}`,
-  ];
-
-  let lastErr: unknown = null;
-  for (const proxy of proxies) {
     try {
-      const items = await fetchViaProxy(proxy, controller.signal);
-      if (items.length > 0) {
-        clearTimeout(timeoutId);
-        const filtered = items.filter(i => {
-          if (!i.pubDate) return true;
-          const year = new Date(i.pubDate).getFullYear();
-          return isNaN(year) || year >= 2025;
-        });
-        return filtered.length > 0 ? filtered : items;
-      }
-    } catch (err) {
-      lastErr = err;
+      return await fetchViaProxy(proxyUrl, controller.signal);
+    } finally {
+      clearTimeout(timeoutId);
     }
-  }
-  clearTimeout(timeoutId);
-  throw lastErr instanceof Error ? lastErr : new Error("Gagal memuat berita");
+  };
+
+  const results = await Promise.allSettled(NEWS_QUERIES.map(fetchOne));
+  const items = results.flatMap((result) => result.status === "fulfilled" ? result.value : []);
+  const unique = new Map<string, NewsItem>();
+
+  items.forEach((item) => {
+    const date = parseNewsDate(item.pubDate);
+    if (!date || date.getFullYear() !== YEAR) return;
+    unique.set(item.link || item.title, item);
+  });
+
+  const sorted = Array.from(unique.values()).sort((a, b) => {
+    const dateA = parseNewsDate(a.pubDate)?.getTime() || 0;
+    const dateB = parseNewsDate(b.pubDate)?.getTime() || 0;
+    return dateB - dateA;
+  });
+
+  if (sorted.length > 0) return sorted;
+  throw new Error("Gagal memuat berita");
 }
 
 const MONTHS = [
