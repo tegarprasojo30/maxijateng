@@ -133,12 +133,14 @@ export default function Fenomena() {
 
   const filtered = useMemo(() => {
     if (!data) return [];
-    return data.filter((item) => {
-      const d = new Date(item.pubDate);
-      if (String(d.getFullYear()) !== tahun) return false;
-      if (bulan !== "all" && d.getMonth() !== Number(bulan)) return false;
-      return true;
-    });
+    return data
+      .filter((item) => {
+        const d = new Date(item.pubDate);
+        if (String(d.getFullYear()) !== tahun) return false;
+        if (bulan !== "all" && d.getMonth() !== Number(bulan)) return false;
+        return true;
+      })
+      .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
   }, [data, bulan, tahun]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
