@@ -267,7 +267,7 @@ export default function Fenomena() {
                     </div>
                   </CardContent>
                 </Card>
-              ))}
+              );})}
             </div>
 
             {totalPages > 1 && (
