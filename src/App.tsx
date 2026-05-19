@@ -44,6 +44,7 @@ const App = () => (
             <Route path="/" element={<Dashboard />} />
             <Route path="/data-lpse" element={<DataLPSE />} />
             <Route path="/skth-2025/progres" element={<ProgressSKTH />} />
+            <Route path="/skth-2025/anomali-data" element={<AnomaliSKTH />} />
             <Route path="/sktr-2026/progres" element={<ProgressSKTR />} />
             <Route path="/sktr-2026/anomali-data" element={<AnomaliSKTR />} />
             <Route path="/fenomena" element={<Fenomena />} />
