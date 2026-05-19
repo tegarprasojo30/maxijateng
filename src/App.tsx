@@ -11,6 +11,7 @@ import DataLPSE from "./pages/Index.tsx";
 import ProgressSKTH from "./pages/ProgressSKTH.tsx";
 import ProgressSKTR from "./pages/ProgressSKTR.tsx";
 import AnomaliSKTR from "./pages/AnomaliSKTR.tsx";
+import AnomaliSKTH from "./pages/AnomaliSKTH.tsx";
 import Pedoman from "./pages/Pedoman.tsx";
 import Fenomena from "./pages/Fenomena.tsx";
 import NotFound from "./pages/NotFound.tsx";
