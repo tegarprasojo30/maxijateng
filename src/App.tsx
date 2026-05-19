@@ -11,6 +11,7 @@ import DataLPSE from "./pages/Index.tsx";
 import ProgressSKTH from "./pages/ProgressSKTH.tsx";
 import ProgressSKTR from "./pages/ProgressSKTR.tsx";
 import AnomaliSKTR from "./pages/AnomaliSKTR.tsx";
+import AnomaliSKTH from "./pages/AnomaliSKTH.tsx";
 import Pedoman from "./pages/Pedoman.tsx";
 import Fenomena from "./pages/Fenomena.tsx";
 import NotFound from "./pages/NotFound.tsx";
@@ -43,6 +44,7 @@ const App = () => (
             <Route path="/" element={<Dashboard />} />
             <Route path="/data-lpse" element={<DataLPSE />} />
             <Route path="/skth-2025/progres" element={<ProgressSKTH />} />
+            <Route path="/skth-2025/anomali-data" element={<AnomaliSKTH />} />
             <Route path="/sktr-2026/progres" element={<ProgressSKTR />} />
             <Route path="/sktr-2026/anomali-data" element={<AnomaliSKTR />} />
             <Route path="/fenomena" element={<Fenomena />} />

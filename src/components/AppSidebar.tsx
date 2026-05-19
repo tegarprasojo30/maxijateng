@@ -21,7 +21,7 @@ const skthSubMenus = [
   { title: "Progres", icon: TrendingUp, path: "/skth-2025/progres" },
   { title: "Daftar Sampel", icon: List, suffix: "/daftar-sampel" },
   { title: "Ganti Sampel", icon: RefreshCw, suffix: "/ganti-sampel" },
-  { title: "Anomali Data", icon: AlertTriangle, suffix: "/anomali-data" },
+  { title: "Anomali Data", icon: AlertTriangle, path: "/skth-2025/anomali-data" },
 ];
 
 const sktrSubMenus = [
