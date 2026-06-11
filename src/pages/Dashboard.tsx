@@ -29,7 +29,7 @@ export default function Dashboard() {
             <LayoutDashboard className="h-7 w-7" />
             <h1 className="text-xl md:text-2xl font-bold tracking-tight">Dashboard</h1>
           </div>
-          <p className="text-sm opacity-80 ml-10">Monitoring Survei Konstruksi — Provinsi Jawa Tengah</p>
+          <p className="text-sm opacity-80 ml-10">Monitoring Survei Perusahaan Konstruksi Tahunan dan Triwulanan BPS Provinsi Jawa Tengah</p>
         </div>
       </header>
 
