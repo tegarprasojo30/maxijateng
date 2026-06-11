@@ -150,7 +150,7 @@ export default function AnomaliSKTR() {
               </SelectContent>
             </Select>
           </div>
-          <div className="w-52">
+          <div className="w-64">
             <Select value={jenisFilter} onValueChange={setJenisFilter}>
               <SelectTrigger><SelectValue placeholder="Jenis Anomali" /></SelectTrigger>
               <SelectContent>
