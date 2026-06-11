@@ -111,7 +111,7 @@ export default function AnomaliSKTHPage() {
             <AlertTriangle className="h-7 w-7" />
             <h1 className="text-xl md:text-2xl font-bold tracking-tight">Anomali Data SKTH 2025</h1>
           </div>
-          <p className="text-sm opacity-80 ml-10">Hasil Pencacahan Survei Perusahaan Konstruksi Tahunan</p>
+          <p className="text-sm opacity-80 ml-10">Hasil Pencacahan Survei Perusahaan Konstruksi Tahunan BPS Provinsi Jawa Tengah</p>
         </div>
       </header>
 
