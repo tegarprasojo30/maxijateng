@@ -5,7 +5,7 @@ export default function ProgressSKTRPage() {
   return (
     <ProgressPage
       title="Progres SKTR 2026"
-      subtitle="Survei Konstruksi Triwulanan — Progress Pengumpulan Data"
+      subtitle="Survei Perusahaan Konstruksi Triwulanan — Progress Pengumpulan Data"
       progressQueryKey="progressKTR1"
       grafikQueryKey="grafikSKTR1"
       fetchProgress={fetchProgressKTR1}

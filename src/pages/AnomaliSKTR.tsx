@@ -122,7 +122,7 @@ export default function AnomaliSKTR() {
             <AlertTriangle className="h-7 w-7" />
             <h1 className="text-xl md:text-2xl font-bold tracking-tight">Anomali Data SKTR 2026</h1>
           </div>
-          <p className="text-sm opacity-80 ml-10">Hasil Pencacahan Survei Perusahaan Konstruksi Triwulanan</p>
+          <p className="text-sm opacity-80 ml-10">Hasil Pencacahan Survei Perusahaan Konstruksi Triwulanan BPS Provinsi Jawa Tengah</p>
         </div>
       </header>
 
