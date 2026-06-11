@@ -98,7 +98,7 @@ export default function Index() {
             </h1>
           </div>
           <p className="text-sm opacity-80 ml-10">
-            Provinsi Jawa Tengah — Data dari LPSE
+            Sumber data:&nbsp;LPSE (Layanan Pengadaan Secara Elektronik)
           </p>
         </div>
       </header>
