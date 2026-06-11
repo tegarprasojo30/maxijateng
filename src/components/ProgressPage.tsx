@@ -209,19 +209,20 @@ function GrafikTiles({ data }: { data: GrafikData }) {
       <Card>
         <CardContent className="pt-5 pb-4">
           <h3 className="text-sm font-semibold text-muted-foreground mb-3">Status Pengumpulan</h3>
-          <div className="h-[250px]">
+          <div className="h-[340px]">
             <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
+              <PieChart margin={{ top: 30, right: 90, bottom: 20, left: 90 }}>
                 <Pie
                   data={pieData}
                   cx="50%"
                   cy="50%"
-                  innerRadius={60}
-                  outerRadius={90}
+                  innerRadius={55}
+                  outerRadius={85}
                   dataKey="value"
                   endAngle={animatedAngle}
                   startAngle={0}
                   label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(2)}%`}
+                  labelLine={true}
                 >
                   {pieData.map((_, index) => (
                     <Cell key={index} fill={PIE_COLORS[index]} />
