@@ -152,7 +152,7 @@ export default function SampelPage({ title, subtitle, sheet, queryKey }: Props) 
                     <TableRow key={i} className="table-row-hover">
                       <TableCell className="text-muted-foreground text-xs border-r">{(page - 1) * PAGE_SIZE + i + 1}</TableCell>
                       <TableCell className="text-sm border-r">{d.kabupatenKota}</TableCell>
-                      <TableCell className="text-sm border-r font-mono">{d.kip}</TableCell>
+                      <TableCell className="text-sm border-r">{d.kip}</TableCell>
                       <TableCell className="text-sm font-medium border-r">{d.namaPerusahaan}</TableCell>
                       <TableCell className="text-sm border-r">{d.skalaUsaha}</TableCell>
                       <TableCell className="text-sm border-r">{d.jenisSampel}</TableCell>
