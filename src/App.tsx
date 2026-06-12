@@ -14,6 +14,8 @@ import AnomaliSKTR from "./pages/AnomaliSKTR.tsx";
 import AnomaliSKTH from "./pages/AnomaliSKTH.tsx";
 import Pedoman from "./pages/Pedoman.tsx";
 import Fenomena from "./pages/Fenomena.tsx";
+import SampelSKTH from "./pages/SampelSKTH.tsx";
+import SampelSKTR from "./pages/SampelSKTR.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -44,8 +46,10 @@ const App = () => (
             <Route path="/" element={<Dashboard />} />
             <Route path="/data-lpse" element={<DataLPSE />} />
             <Route path="/skth-2025/progres" element={<ProgressSKTH />} />
+            <Route path="/skth-2025/daftar-sampel" element={<SampelSKTH />} />
             <Route path="/skth-2025/anomali-data" element={<AnomaliSKTH />} />
             <Route path="/sktr-2026/progres" element={<ProgressSKTR />} />
+            <Route path="/sktr-2026/daftar-sampel" element={<SampelSKTR />} />
             <Route path="/sktr-2026/anomali-data" element={<AnomaliSKTR />} />
             <Route path="/fenomena" element={<Fenomena />} />
             <Route path="/pedoman" element={<Pedoman />} />
