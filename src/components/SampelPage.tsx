@@ -163,7 +163,7 @@ export default function SampelPage({ title, subtitle, sheet, queryKey }: Props) 
               </TableBody>
             </Table>
 
-            <div className="flex items-center justify-between px-4 py-3 border-t bg-muted/30 sticky bottom-0">
+            <div className="flex items-center justify-between px-4 py-3 border-t bg-muted sticky bottom-0">
               <p className="text-sm text-muted-foreground">
                 Menampilkan {fmt(Math.min((page - 1) * PAGE_SIZE + 1, filtered.length))}–{fmt(Math.min(page * PAGE_SIZE, filtered.length))} dari {fmt(filtered.length)} data
               </p>
