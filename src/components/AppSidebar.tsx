@@ -19,14 +19,14 @@ import { toast } from "sonner";
 
 const skthSubMenus = [
   { title: "Progres", icon: TrendingUp, path: "/skth-2025/progres" },
-  { title: "Daftar Sampel", icon: List, suffix: "/daftar-sampel" },
+  { title: "Daftar Sampel", icon: List, path: "/skth-2025/daftar-sampel" },
   { title: "Ganti Sampel", icon: RefreshCw, suffix: "/ganti-sampel" },
   { title: "Anomali Data", icon: AlertTriangle, path: "/skth-2025/anomali-data" },
 ];
 
 const sktrSubMenus = [
   { title: "Progres", icon: TrendingUp, path: "/sktr-2026/progres" },
-  { title: "Daftar Sampel", icon: List, suffix: "/daftar-sampel" },
+  { title: "Daftar Sampel", icon: List, path: "/sktr-2026/daftar-sampel" },
   { title: "Ganti Sampel", icon: RefreshCw, suffix: "/ganti-sampel" },
   { title: "Anomali Data", icon: AlertTriangle, path: "/sktr-2026/anomali-data" },
 ];
