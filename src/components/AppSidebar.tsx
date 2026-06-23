@@ -99,6 +99,11 @@ export function AppSidebar() {
                                 <item.icon className="h-3.5 w-3.5 mr-2" />
                                 <span>{item.title}</span>
                               </NavLink>
+                            ) : item.url ? (
+                              <a href={item.url} target="_blank" rel="noopener noreferrer" className="flex items-center">
+                                <item.icon className="h-3.5 w-3.5 mr-2" />
+                                <span>{item.title}</span>
+                              </a>
                             ) : (
                               <a href="#" onClick={handleComingSoon} className="flex items-center">
                                 <item.icon className="h-3.5 w-3.5 mr-2" />
