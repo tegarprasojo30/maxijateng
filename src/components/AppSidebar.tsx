@@ -20,14 +20,14 @@ import { toast } from "sonner";
 const skthSubMenus = [
   { title: "Progres", icon: TrendingUp, path: "/skth-2025/progres" },
   { title: "Daftar Sampel", icon: List, path: "/skth-2025/daftar-sampel" },
-  { title: "Ganti Sampel", icon: RefreshCw, suffix: "/ganti-sampel" },
+  { title: "Ganti Sampel", icon: RefreshCw, url: "https://docs.google.com/spreadsheets/d/1VPe9EZ2e5QCK8jybggZF9LUdtHcAwUtVgJT8zV3APog/edit?usp=sharing" },
   { title: "Anomali Data", icon: AlertTriangle, path: "/skth-2025/anomali-data" },
 ];
 
 const sktrSubMenus = [
   { title: "Progres", icon: TrendingUp, path: "/sktr-2026/progres" },
   { title: "Daftar Sampel", icon: List, path: "/sktr-2026/daftar-sampel" },
-  { title: "Ganti Sampel", icon: RefreshCw, suffix: "/ganti-sampel" },
+  { title: "Ganti Sampel", icon: RefreshCw, url: "https://docs.google.com/spreadsheets/d/1VPe9EZ2e5QCK8jybggZF9LUdtHcAwUtVgJT8zV3APog/edit?usp=sharing" },
   { title: "Anomali Data", icon: AlertTriangle, path: "/sktr-2026/anomali-data" },
 ];
 
@@ -99,6 +99,11 @@ export function AppSidebar() {
                                 <item.icon className="h-3.5 w-3.5 mr-2" />
                                 <span>{item.title}</span>
                               </NavLink>
+                            ) : item.url ? (
+                              <a href={item.url} target="_blank" rel="noopener noreferrer" className="flex items-center">
+                                <item.icon className="h-3.5 w-3.5 mr-2" />
+                                <span>{item.title}</span>
+                              </a>
                             ) : (
                               <a href="#" onClick={handleComingSoon} className="flex items-center">
                                 <item.icon className="h-3.5 w-3.5 mr-2" />
@@ -135,6 +140,11 @@ export function AppSidebar() {
                                 <item.icon className="h-3.5 w-3.5 mr-2" />
                                 <span>{item.title}</span>
                               </NavLink>
+                            ) : item.url ? (
+                              <a href={item.url} target="_blank" rel="noopener noreferrer" className="flex items-center">
+                                <item.icon className="h-3.5 w-3.5 mr-2" />
+                                <span>{item.title}</span>
+                              </a>
                             ) : (
                               <a href="#" onClick={handleComingSoon} className="flex items-center">
                                 <item.icon className="h-3.5 w-3.5 mr-2" />
