@@ -240,8 +240,8 @@ export async function fetchDashboard(): Promise<DashboardData> {
     skthBesar: rows[4]?.[14] || '0',
     skthMenengah: rows[5]?.[14] || '0',
     skthKecil: rows[6]?.[14] || '0',
-    sktrTitle: rows[9]?.[0] || '',
-    sktrTriwulan: rows[9]?.[11] || 'Triwulan II',
+    sktrTitle: (rows[9]?.[0] || '').replace('Triwulan I', 'Triwulan II'),
+    sktrTriwulan: (rows[9]?.[11] === 'Triwulan I' ? 'Triwulan II' : (rows[9]?.[11] || 'Triwulan II')),
     sktrTargetSampel: rows[11]?.[14] || '0',
     sktrSelesai: rows[13]?.[14] || '0%',
     sktrProgres: rows[13]?.[14] || '0%',
@@ -310,7 +310,7 @@ export async function fetchAnomaliSKTR(): Promise<{ data: AnomaliSKTR[]; notes: 
   };
   const data = rows.slice(1).map(r => ({
     kabupatenKota: r[0] || '',
-    triwulan: r[1] || '',
+    triwulan: r[1] === 'Triwulan I' ? 'Triwulan II' : (r[1] || ''),
     namaPerusahaan: r[2] || '',
     skalaUsaha: r[3] || '',
     namaProyek: r[4] || '',
