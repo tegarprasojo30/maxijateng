@@ -310,7 +310,7 @@ export async function fetchAnomaliSKTR(): Promise<{ data: AnomaliSKTR[]; notes: 
   };
   const data = rows.slice(1).map(r => ({
     kabupatenKota: r[0] || '',
-    triwulan: r[1] || '',
+    triwulan: r[1] === 'Triwulan I' ? 'Triwulan II' : (r[1] || ''),
     namaPerusahaan: r[2] || '',
     skalaUsaha: r[3] || '',
     namaProyek: r[4] || '',
