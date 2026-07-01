@@ -241,7 +241,7 @@ export async function fetchDashboard(): Promise<DashboardData> {
     skthMenengah: rows[5]?.[14] || '0',
     skthKecil: rows[6]?.[14] || '0',
     sktrTitle: rows[9]?.[0] || '',
-    sktrTriwulan: rows[9]?.[11] || '',
+    sktrTriwulan: rows[9]?.[11] || 'Triwulan II',
     sktrTargetSampel: rows[11]?.[14] || '0',
     sktrSelesai: rows[13]?.[14] || '0%',
     sktrProgres: rows[13]?.[14] || '0%',
