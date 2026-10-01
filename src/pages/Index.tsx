@@ -99,7 +99,9 @@ export default function Index() {
         if (acc.seen.has(key)) return acc;
         acc.seen.add(key);
         acc.rows.push([
-          p.kodePenyedia, p.namaPenyedia, p.kodeRUP, p.status, p.namaPaket,
+          p.kodePenyedia, p.namaPenyedia,
+          /^\d+(\.0+)?$/.test(p.kodeRUP) ? p.kodeRUP.replace(/\.0+$/, '') : p.kodeRUP,
+          p.status, p.namaPaket,
           p.kelompokDinas, p.satuanKerja, p.namaLPSE, p.sumberDana,
           p.tanggalPenetapan, p.nilaiKontrak ? `Rp ${p.nilaiKontrak}` : '-',
         ]);
