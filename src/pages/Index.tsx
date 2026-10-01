@@ -155,6 +155,12 @@ export default function Index() {
               </SelectContent>
             </Select>
           </div>
+          <div className="sm:ml-auto">
+            <Button variant="outline" onClick={handleDownloadXlsx} disabled={!filtered.length || loadingCompanies}>
+              <FileDown className="h-4 w-4 mr-1.5" />
+              Unduh .xlsx
+            </Button>
+          </div>
         </div>
 
         {/* Table */}
