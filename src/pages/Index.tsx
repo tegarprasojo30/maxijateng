@@ -110,6 +110,14 @@ export default function Index() {
 
     const proyekHeaders = ["Kode Penyedia", "Nama Penyedia", "Kode RUP", "Status", "Nama Paket", "Kelompok Dinas", "Satuan Kerja", "Nama LPSE", "Sumber Dana", "Tgl Penetapan", "Nilai Kontrak"];
     const wsProyek = XLSX.utils.aoa_to_sheet([proyekHeaders, ...proyekRows]);
+    // Force Kode RUP (col C) and Kode Penyedia (col A) to text so no decimals/scientific notation
+    const proyekRange = XLSX.utils.decode_range(wsProyek['!ref']);
+    for (let row = proyekRange.s.r + 1; row <= proyekRange.e.r; row++) {
+      for (const col of [0, 2]) {
+        const cell = wsProyek[XLSX.utils.encode_cell({ r: row, c: col })];
+        if (cell && cell.t === 'n') { cell.t = 's'; cell.v = String(cell.v); }
+      }
+    }
     XLSX.utils.book_append_sheet(wb, wsProyek, "Detail Proyek");
 
     XLSX.writeFile(wb, `Data_LPSE.xlsx`);
