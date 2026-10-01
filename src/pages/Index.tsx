@@ -83,13 +83,43 @@ export default function Index() {
   const exportHeaders = ["No", "Kabupaten/Kota", "Nama Penyedia", "Alamat", "Skala Usaha", "Jumlah Proyek 2025", "Jumlah Proyek 2026", "Total Nilai Proyek 2025-2026"];
   const handleDownloadXlsx = () => {
     if (!filtered.length) return;
-    const rows = filtered.map((c, i) => [
+    const ws = XLSX.utils.aoa_to_sheet([exportHeaders, ...filtered.map((c, i) => [
       i + 1, c.kabupatenKota, c.namaPenyedia, c.alamat, c.skalaUsaha,
       c.jumlahProyek2025 || '-', c.jumlahProyekTw1 || '-', c.totalNilaiProyek2025 || '-',
-    ]);
-    const ws = XLSX.utils.aoa_to_sheet([exportHeaders, ...rows]);
+    ])]);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Data LPSE");
+
+    // Sheet 2: detail proyek (sama seperti tampilan tombol Proyek), grouped by Kode RUP
+    const kodeSet = new Set(filtered.map(c => c.kodePenyedia));
+    const proyekRows = allProjects
+      .filter(p => kodeSet.has(p.kodePenyedia))
+      .reduce<{ seen: Set<string>; rows: (string | number)[][] }>((acc, p) => {
+        const key = p.kodeRUP;
+        if (acc.seen.has(key)) return acc;
+        acc.seen.add(key);
+        acc.rows.push([
+          p.kodePenyedia, p.namaPenyedia,
+          /^\d+(\.0+)?$/.test(p.kodeRUP) ? p.kodeRUP.replace(/\.0+$/, '') : p.kodeRUP,
+          p.status, p.namaPaket,
+          p.kelompokDinas, p.satuanKerja, p.namaLPSE, p.sumberDana,
+          p.tanggalPenetapan, p.nilaiKontrak ? `Rp ${p.nilaiKontrak}` : '-',
+        ]);
+        return acc;
+      }, { seen: new Set(), rows: [] }).rows;
+
+    const proyekHeaders = ["Kode Penyedia", "Nama Penyedia", "Kode RUP", "Status", "Nama Paket", "Kelompok Dinas", "Satuan Kerja", "Nama LPSE", "Sumber Dana", "Tgl Penetapan", "Nilai Kontrak"];
+    const wsProyek = XLSX.utils.aoa_to_sheet([proyekHeaders, ...proyekRows]);
+    // Force Kode RUP (col C) and Kode Penyedia (col A) to text so no decimals/scientific notation
+    const proyekRange = XLSX.utils.decode_range(wsProyek['!ref']);
+    for (let row = proyekRange.s.r + 1; row <= proyekRange.e.r; row++) {
+      for (const col of [0, 2]) {
+        const cell = wsProyek[XLSX.utils.encode_cell({ r: row, c: col })];
+        if (cell && cell.t === 'n') { cell.t = 's'; cell.v = String(cell.v); }
+      }
+    }
+    XLSX.utils.book_append_sheet(wb, wsProyek, "Detail Proyek");
+
     XLSX.writeFile(wb, `Data_LPSE.xlsx`);
   };
 
@@ -156,7 +186,7 @@ export default function Index() {
             </Select>
           </div>
           <div className="sm:ml-auto">
-            <Button variant="outline" onClick={handleDownloadXlsx} disabled={!filtered.length || loadingCompanies}>
+            <Button variant="outline" onClick={handleDownloadXlsx} disabled={!filtered.length || loadingCompanies || loadingProjects}>
               <FileDown className="h-4 w-4 mr-1.5" />
               Unduh .xlsx
             </Button>
