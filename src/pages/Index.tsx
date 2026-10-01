@@ -7,7 +7,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Input } from "@/components/ui/input";
 import CompanyDetailDialog from "@/components/CompanyDetailDialog";
 import ProjectListDialog from "@/components/ProjectListDialog";
-import { Eye, FolderOpen, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Search, Loader2, HardHat } from "lucide-react";
+import { Eye, FolderOpen, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Search, Loader2, HardHat, FileDown } from "lucide-react";
+import * as XLSX from "xlsx";
 
 const PAGE_SIZE = 15;
 
