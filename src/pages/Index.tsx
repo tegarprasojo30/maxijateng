@@ -7,7 +7,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Input } from "@/components/ui/input";
 import CompanyDetailDialog from "@/components/CompanyDetailDialog";
 import ProjectListDialog from "@/components/ProjectListDialog";
-import { Eye, FolderOpen, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Search, Loader2, HardHat } from "lucide-react";
+import { Eye, FolderOpen, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Search, Loader2, HardHat, FileDown } from "lucide-react";
+import * as XLSX from "xlsx";
 
 const PAGE_SIZE = 15;
 
@@ -79,6 +80,19 @@ export default function Index() {
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
+  const exportHeaders = ["No", "Kabupaten/Kota", "Nama Penyedia", "Alamat", "Skala Usaha", "Jumlah Proyek 2025", "Jumlah Proyek 2026", "Total Nilai Proyek 2025-2026"];
+  const handleDownloadXlsx = () => {
+    if (!filtered.length) return;
+    const rows = filtered.map((c, i) => [
+      i + 1, c.kabupatenKota, c.namaPenyedia, c.alamat, c.skalaUsaha,
+      c.jumlahProyek2025 || '-', c.jumlahProyekTw1 || '-', c.totalNilaiProyek2025 || '-',
+    ]);
+    const ws = XLSX.utils.aoa_to_sheet([exportHeaders, ...rows]);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Data LPSE");
+    XLSX.writeFile(wb, `Data_LPSE.xlsx`);
+  };
+
   useEffect(() => { setPage(1); }, [filter, skalaFilter, search]);
 
   const companyProjects = useMemo(() => {
@@ -140,6 +154,12 @@ export default function Index() {
                 ))}
               </SelectContent>
             </Select>
+          </div>
+          <div className="sm:ml-auto">
+            <Button variant="outline" onClick={handleDownloadXlsx} disabled={!filtered.length || loadingCompanies}>
+              <FileDown className="h-4 w-4 mr-1.5" />
+              Unduh .xlsx
+            </Button>
           </div>
         </div>
 
